@@ -1,0 +1,35 @@
+import { Database } from "@lb/database";
+import { createServerClient } from "@supabase/ssr";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import type { MiddlewareHandler } from "hono";
+import { getCookie, setCookie, deleteCookie } from "hono/cookie";
+
+export const supabaseMiddleware: MiddlewareHandler<{
+  Variables: {
+    supabase: SupabaseClient;
+  };
+}> = async (c, next) => {
+  const client = createServerClient<Database>(
+    c.env.SUPABASE_URL ?? "",
+    c.env.SUPABASE_KEY ?? "",
+    {
+      cookies: {
+        get: (key) => {
+          return getCookie(c, key);
+        },
+        set: (key, value, options) => {
+          setCookie(c, key, value, options);
+        },
+        remove: (key, options) => {
+          deleteCookie(c, key, options);
+        },
+      },
+      cookieOptions: {
+        httpOnly: true,
+        secure: true,
+      },
+    }
+  );
+  c.set("supabase", client);
+  await next();
+};

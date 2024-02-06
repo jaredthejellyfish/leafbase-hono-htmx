@@ -4,6 +4,13 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "strict": true,
+    "paths": {
+      "@/*": ["./src/*"],
+      "@lb/*": ["./src/lib/*"],
+      "@c/*": ["./src/components/*"],
+      "@p/*": ["./src/pages/*"],
+      "@l/*": ["./src/layouts/*"],
+    },
     "lib": [
       "ESNext"
     ],
