@@ -1,3 +1,4 @@
+import { Strain } from "@/types";
 import Badge from "./badge";
 
 type Effect = {
@@ -5,7 +6,7 @@ type Effect = {
 };
 
 type Props = {
-  strain: any;
+  strain: Strain;
 };
 
 const effects: Effect = {
@@ -69,7 +70,7 @@ const effectColors: Effect = {
   downcast: "red",
 };
 
-function getTopThreeEffects(strain: any): string[] {
+function getTopThreeEffects(strain: Strain): string[] {
   try {
     const effects = Object.values(strain.effects);
     const sortedEffects = effects.sort((a, b) => b.score - a.score);
@@ -80,7 +81,7 @@ function getTopThreeEffects(strain: any): string[] {
   }
 }
 
-function getTopThreeEffectsNegative(strain: any): string[] {
+function getTopThreeEffectsNegative(strain: Strain): string[] {
   try {
     const effects = Object.values(strain.effects);
     const sortedEffects = effects.sort((a, b) => a.score - b.score);

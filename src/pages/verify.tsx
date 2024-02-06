@@ -1,6 +1,4 @@
-type Props = {};
-
-function VerifyPage({}: Props) {
+function VerifyPage() {
   return (
     <main class="flex items-center justify-center bg-zinc-50/50 px-4 py-64 dark:bg-zinc-950 sm:px-0">
       <div class="flex w-full flex-col items-center justify-center gap-3 rounded-lg px-8 py-10 shadow-lg dark:bg-zinc-900 md:w-96">

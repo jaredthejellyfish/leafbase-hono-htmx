@@ -1,6 +1,6 @@
-type Props = {};
 
-function LoginPage({}: Props) {
+
+function LoginPage() {
   return (
     <main class="flex h-[85vh] items-center justify-center bg-zinc-50/50 px-4 dark:bg-zinc-950 sm:h-screen-bar sm:px-0">
       <div class="mx-auto max-w-sm space-y-3 rounded-lg bg-white p-5 shadow-xl dark:bg-zinc-900 sm:p-8">

@@ -1,10 +1,10 @@
-import { supabase } from "@lb/supabase";
 import StarRating from "@c/star-rating";
 import { effects, terpenes } from "@lb/data/colors";
 import StrainSoma from "@c/strain-soma";
 import NavBreadcrumbs from "@c/nav-breadcrumbs";
+import { Strain } from "@/types";
 
-type Props = { strain: any };
+type Props = { strain: Strain };
 
 async function StrainPage({ strain }: Props) {
   return (
@@ -53,10 +53,8 @@ async function StrainPage({ strain }: Props) {
                     THC {strain.thcPercent && strain.thcPercent}%
                   </span>
                 ) : null}
-                {/* @ts-ignore - cannabinoid-specific types missing from strain.cannabinoids */}
                 {strain.cannabinoids?.cbd?.percentile50 ? (
                   <span class="">
-                    {/* @ts-ignore - cannabinoid-specific types missing from strain.cannabinoids */}
                     CBD: {strain && strain?.cannabinoids?.cbd?.percentile50}%
                   </span>
                 ) : null}

@@ -1,7 +1,8 @@
+import { Strain } from "@/types";
 import StarRating from "./star-rating";
 
 type Props = {
-  strain: any;
+  strain: Strain;
   loadMore?: boolean;
   page?: number;
   filter: "re" | "az" | "za" | "sr";

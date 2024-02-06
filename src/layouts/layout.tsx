@@ -1,4 +1,5 @@
-import Navigation from "@c/nav";
+import Navigation from "@/components/nav";
+import NavDropdown from "@/components/nav/nav-dropdown";
 import { getProfile } from "@lb/utils";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Context, Env } from "hono";
@@ -9,16 +10,20 @@ type Props = {
   c: Context<
     Env & {
       Variables: {
+        // eslint-disable-next-line
         supabase: SupabaseClient<any, "public", any>;
       };
     },
     string,
+    // eslint-disable-next-line
     {}
   >;
 };
 
 async function RootLayout({ children, title, c }: Props) {
   const { profile } = await getProfile(c);
+
+  const pathname = new URL(c.req.url).pathname;
 
   return (
     <html class="dark">
@@ -32,6 +37,7 @@ async function RootLayout({ children, title, c }: Props) {
       </head>
       <body class="dark:bg-zinc-950 dark:text-white ">
         <Navigation profile={profile} />
+        <NavDropdown pathname={pathname} />
         {children}
       </body>
     </html>

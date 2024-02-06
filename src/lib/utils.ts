@@ -1,4 +1,4 @@
-import { Profile, Strain, SupabaseContext } from "@/types";
+import { Profile, Strain } from "@/types";
 import { supabase } from "./supabase";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -40,10 +40,12 @@ export async function getProfile(
   c: Context<
     Env & {
       Variables: {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         supabase: SupabaseClient<any, "public", any>;
       };
     },
     string,
+    // eslint-disable-next-line
     {}
   >
 ) {

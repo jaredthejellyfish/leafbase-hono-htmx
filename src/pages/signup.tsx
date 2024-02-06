@@ -1,6 +1,4 @@
-type Props = {};
-
-function SignupPage({}: Props) {
+function SignupPage() {
   return (
     <main class="flex h-[85vh] items-center justify-center bg-zinc-50/50 px-4 dark:bg-zinc-950 sm:h-screen-bar sm:px-0">
       <div class="flex size-full items-center justify-center">
@@ -13,7 +11,11 @@ function SignupPage({}: Props) {
               Enter your email below to login to your account
             </p>
           </div>
-          <form method="POST" action="/auth/signup" class="mt-8 flex flex-col gap-y-4">
+          <form
+            method="POST"
+            action="/auth/signup"
+            class="mt-8 flex flex-col gap-y-4"
+          >
             <input
               name="remember"
               type="hidden"
