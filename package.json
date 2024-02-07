@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "dev": "wrangler dev src/index.tsx",
-    "deploy": "bunx tailwindcss -o ./assets/static/index.css --minify && wrangler deploy --minify src/index.tsx",
+    "dev": "bunx wrangler dev src/index.tsx",
+    "deploy": "bunx tailwindcss -o ./assets/static/index.css --minify && bunx wrangler deploy --minify src/index.tsx",
     "css:dev": "bunx tailwindcss -o ./assets/static/index.css --minify --watch",
     "css:prod": "bunx tailwindcss -o ./assets/static/index.css --minify"
   },
