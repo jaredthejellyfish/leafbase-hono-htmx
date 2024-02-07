@@ -81,6 +81,17 @@ if (tailwind.exitCode === 0)
   tailwindSpinner.succeed(`Generated tailwind css in ${tailwindTime}ms`);
 else tailwindSpinner.fail('Failed to generate tailwind css');
 
+const eslintSpinner = ora('Running eslint').start();
+const eslintStart = Date.now();
+const eslint = await $`eslint . --fix`;
+const eslintTime = Date.now() - eslintStart;
+if (eslint.exitCode === 0)
+  eslintSpinner.succeed(`Ran eslint in ${eslintTime}ms`);
+else {
+  eslintSpinner.fail('There was an error in eslint!');
+  throw new Error('There was an eslint error');
+}
+
 const deploySpinner = ora('Deploying to cloudflare workers').start();
 const deployStart = Date.now();
 const deploy = await $`bunx wrangler deploy --minify src/index.tsx`.text();

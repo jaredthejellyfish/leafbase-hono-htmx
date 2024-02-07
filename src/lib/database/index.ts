@@ -210,14 +210,14 @@ export type Database = {
             foreignKeyName: "long_pairings_strain1_id_fkey"
             columns: ["strain1_id"]
             isOneToOne: false
-            referencedRelation: "strains"
+            referencedRelation: "strains_o"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "long_pairings_strain2_id_fkey"
             columns: ["strain2_id"]
             isOneToOne: false
-            referencedRelation: "strains"
+            referencedRelation: "strains_o"
             referencedColumns: ["id"]
           }
         ]
@@ -362,14 +362,14 @@ export type Database = {
             foreignKeyName: "short_pairings_strain1_id_fkey"
             columns: ["strain1_id"]
             isOneToOne: false
-            referencedRelation: "strains"
+            referencedRelation: "strains_o"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "short_pairings_strain2_id_fkey"
             columns: ["strain2_id"]
             isOneToOne: false
-            referencedRelation: "strains"
+            referencedRelation: "strains_o"
             referencedColumns: ["id"]
           }
         ]
@@ -440,7 +440,7 @@ export type Database = {
             foreignKeyName: "strain_comments_strain_id_fkey"
             columns: ["strain_id"]
             isOneToOne: false
-            referencedRelation: "strains"
+            referencedRelation: "strains_o"
             referencedColumns: ["id"]
           },
           {
@@ -476,7 +476,7 @@ export type Database = {
             foreignKeyName: "strain_likes_strain_id_fkey"
             columns: ["strain_id"]
             isOneToOne: false
-            referencedRelation: "strains"
+            referencedRelation: "strains_o"
             referencedColumns: ["id"]
           },
           {
@@ -489,6 +489,72 @@ export type Database = {
         ]
       }
       strains: {
+        Row: {
+          averageRating: number | null
+          cannabinoids: Json | null
+          category: string | null
+          description: string | null
+          dispensaryMenuId: string | null
+          effects: Json | null
+          flowerImageSvg: string | null
+          id: string
+          likes_count: number | null
+          name: string
+          nugImage: string | null
+          phenotype: string | null
+          shortDescription: string | null
+          slug: string
+          subtitle: string
+          terps: Json | null
+          thcPercent: number | null
+          topEffect: string | null
+          topTerpene: string | null
+        }
+        Insert: {
+          averageRating?: number | null
+          cannabinoids?: Json | null
+          category?: string | null
+          description?: string | null
+          dispensaryMenuId?: string | null
+          effects?: Json | null
+          flowerImageSvg?: string | null
+          id: string
+          likes_count?: number | null
+          name: string
+          nugImage?: string | null
+          phenotype?: string | null
+          shortDescription?: string | null
+          slug: string
+          subtitle: string
+          terps?: Json | null
+          thcPercent?: number | null
+          topEffect?: string | null
+          topTerpene?: string | null
+        }
+        Update: {
+          averageRating?: number | null
+          cannabinoids?: Json | null
+          category?: string | null
+          description?: string | null
+          dispensaryMenuId?: string | null
+          effects?: Json | null
+          flowerImageSvg?: string | null
+          id?: string
+          likes_count?: number | null
+          name?: string
+          nugImage?: string | null
+          phenotype?: string | null
+          shortDescription?: string | null
+          slug?: string
+          subtitle?: string
+          terps?: Json | null
+          thcPercent?: number | null
+          topEffect?: string | null
+          topTerpene?: string | null
+        }
+        Relationships: []
+      }
+      strains_o: {
         Row: {
           averageRating: number | null
           cannabinoids: Json | null
@@ -578,7 +644,7 @@ export type Database = {
             foreignKeyName: "strains_vectors_strain_id_fkey"
             columns: ["strain_id"]
             isOneToOne: false
-            referencedRelation: "strains"
+            referencedRelation: "strains_o"
             referencedColumns: ["id"]
           }
         ]

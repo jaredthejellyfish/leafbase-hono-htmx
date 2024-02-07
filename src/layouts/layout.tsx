@@ -39,13 +39,14 @@ async function RootLayout({ children, title, description, c }: Props) {
         <link rel="stylesheet" href="/static/index.css" />
         <script src="https://unpkg.com/htmx.org@1.9.3"></script>
         <script src="https://unpkg.com/hyperscript.org@0.9.9"></script>
+        <script src="/static/navigation.js" defer />
         <title>{title}</title>
         <meta
           name="description"
           content={description ?? 'Leafbase is a cannabis strain database.'}
         ></meta>
       </head>
-      <body class="dark:bg-zinc-950 dark:text-white ">
+      <body class="dark:bg-zinc-950 dark:text-white" hx-boost="true">
         <Navigation profile={profile} />
         <NavDropdown pathname={pathname} />
         {children}

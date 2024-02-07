@@ -5,7 +5,7 @@ import StrainCard from '@c/strain-card';
 
 import { getPaginatedStrains } from '@lb/utils';
 
-import { supabaseMiddleware } from './supabase';
+import { supabaseMiddleware } from '@/supabase';
 
 export const apiApp = new Hono();
 

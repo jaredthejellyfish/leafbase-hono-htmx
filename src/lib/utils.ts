@@ -3,10 +3,10 @@ import { type ClassValue, clsx } from 'clsx';
 import { Context, Env } from 'hono';
 import { twMerge } from 'tailwind-merge';
 
-import { Profile, Strain } from '@/types';
+import { Database } from '@lb/database';
+import { supabase } from '@lb/supabase';
 
-import { Database } from './database';
-import { supabase } from './supabase';
+import { FriendExtended, Profile, Strain } from '@/types';
 
 export async function getPaginatedStrains(
   filter: 're' | 'az' | 'za' | 'sr',
@@ -81,4 +81,67 @@ export async function getProfile(
   }
 
   return { profile: null, session: null };
+}
+export async function getFriends(
+  c:
+    | Context<
+        Env & {
+          Variables: {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            supabase: SupabaseClient<Database, 'public', any>;
+          };
+        },
+        string,
+        // eslint-disable-next-line
+        {}
+      >
+    // eslint-disable-next-line
+    | Context<Env, any, {}>,
+  session: Session | null,
+) {
+  if (!c || !c.var.supabase || !session) {
+    return { friends: null, error: null };
+  }
+
+  // eslint-disable-next-line
+  const supabase = c.var.supabase as SupabaseClient<Database, 'public', any>;
+
+  const { data: friendsData, error } = await supabase
+    .from('friends')
+    .select(
+      `*,
+  to:profiles!friends_to_fkey (
+    id,
+    username,
+    name,
+    image
+  ),
+  from:profiles!friends_from_fkey (
+    id,
+    username,
+    name,
+    image
+  )`,
+    )
+    .or(`from.eq.${session?.user.id},to.eq.${session?.user.id}`)
+    .returns<FriendExtended[]>();
+
+  if (error) return { friends: null, error };
+
+  const friends = friendsData?.map((friend) => {
+    return {
+      ...friend.to,
+      pending: friend.pending,
+      from: friend.from,
+      to: friend.to,
+    };
+  });
+
+  friends.sort((a, b) => {
+    if (a.pending && !b.pending) return -1;
+    if (!a.pending && b.pending) return 1;
+    return 0;
+  });
+
+  return { friends, error: null };
 }

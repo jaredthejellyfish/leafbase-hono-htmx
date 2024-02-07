@@ -5,7 +5,7 @@ import z from 'zod';
 
 import RootLayout from '@l/layout';
 
-import { getProfile } from '@lb/utils';
+import { getFriends, getProfile } from '@lb/utils';
 
 import AllStrains from '@p/all-strains';
 import LoginPage from '@p/login';
@@ -13,10 +13,10 @@ import ProfilePage from '@p/profile';
 import SignupPage from '@p/signup';
 import StrainPage from '@p/strain';
 
-import { apiApp } from './api';
-import { authApp } from './auth';
-import { supabaseMiddleware } from './supabase';
-import { Strain } from './types';
+import { apiApp } from '@/api';
+import { authApp } from '@/auth';
+import { supabaseMiddleware } from '@/supabase';
+import { Strain } from '@/types';
 
 const app = new Hono();
 
@@ -25,6 +25,9 @@ app.get('/', async (c) => {
 });
 
 app.get('/login', supabaseMiddleware, async (c) => {
+  const { session } = await getProfile(c);
+  if (session) return c.redirect('/profile');
+
   return c.html(
     <RootLayout
       title={'Login - Leafbase'}
@@ -37,6 +40,9 @@ app.get('/login', supabaseMiddleware, async (c) => {
 });
 
 app.get('/signup', supabaseMiddleware, async (c) => {
+  const { session } = await getProfile(c);
+  if (session) return c.redirect('/profile');
+
   return c.html(
     <RootLayout
       title={'Sign up - Leafbase'}
@@ -90,8 +96,9 @@ app.get('/strains/:strain', supabaseMiddleware, async (c) => {
 
 app.get('/profile', supabaseMiddleware, async (c) => {
   const { profile, session } = await getProfile(c);
+  const { friends, error } = await getFriends(c, session);
 
-  if (!profile || !session) {
+  if (!profile || !session || error) {
     return c.redirect('/login');
   }
 
@@ -101,14 +108,14 @@ app.get('/profile', supabaseMiddleware, async (c) => {
       description={`Profile page for ${profile.username}.`}
       c={c}
     >
-      <ProfilePage user={profile} session={session} />
+      <ProfilePage user={profile} session={session} friends={friends} />
     </RootLayout>,
   );
 });
 
 app.notFound(async (c) => {
   return c.html(
-    <RootLayout title={'404 - Leafbase'} c={c}>
+    <RootLayout title={'404 - Leafbase'} c={c} description="Page not found!">
       <span>Page not found</span>
     </RootLayout>,
   );

@@ -1,13 +1,18 @@
 import { Session } from '@supabase/supabase-js';
 import { format } from 'date-fns';
 
+import Modal from '@c/modal';
 import NavBreadcrumbs from '@c/nav-breadcrumbs';
 
 import { cn } from '@lb/utils';
 
-import { Profile } from '@/types';
+import { FriendExtended, Profile } from '@/types';
 
-type Props = { user: Profile; session: Session };
+type Props = {
+  user: Profile;
+  session: Session;
+  friends: FriendExtended[] | null;
+};
 
 export const languages = [
   { label: 'English', value: 'en' },
@@ -21,7 +26,80 @@ export const languages = [
   { label: 'Chinese', value: 'zh' },
 ] as const;
 
-function ProfilePage({ user, session }: Props) {
+function Friend({
+  friend: { to, from },
+  status,
+  useTo,
+}: {
+  friend: {
+    to: { id: string; username: string; name: string; image: string };
+    from: { id: string; username: string; name: string; image: string };
+  };
+  status: string;
+  useTo?: boolean;
+}) {
+  const user = useTo ? to : from;
+
+  console.log(status);
+  return (
+    <a
+      href={`/profile/${user.username}`}
+      class="flex flex-row items-center justify-between rounded-xl border border-zinc-300 bg-zinc-50 px-4 py-1.5 dark:border-zinc-700 dark:bg-zinc-800"
+    >
+      <div class="flex h-12 flex-row items-center justify-start gap-x-3  sm:gap-x-4 ">
+        <img
+          src={user.image!}
+          alt={user.name!}
+          width={50}
+          height={50}
+          class="aspect-square size-11 rounded-full sm:size-12"
+        />
+        <div class="flex flex-col gap-0">
+          <span class="-mb-1.5 text-sm font-semibold sm:text-base">
+            {user.name}
+          </span>
+          <span class="mt-1 text-xs text-green-700 sm:mt-0.5 sm:text-sm">
+            @{user.username}
+          </span>
+        </div>
+      </div>
+      {status === 'pending' && (
+        <div class="cursor-not-allowed rounded border border-zinc-400 px-2 py-1 text-sm text-zinc-400">
+          Pending
+        </div>
+      )}
+      {/* 
+      {status === 'toAccept' && (
+<div class="flex flex-row sm:gap-x-2">
+<DenyRequestButton from={from.id} to={to.id} />
+<AcceptRequestButton from={from.id} to={to.id} />
+</div>
+)} */}
+
+      {status === 'accepted' && (
+        <svg
+          class="justify-self-end"
+          stroke="currentColor"
+          fill="none"
+          stroke-width="0"
+          viewBox="0 0 15 15"
+          height="35px"
+          width="35px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M6.18194 4.18185C6.35767 4.00611 6.6426 4.00611 6.81833 4.18185L9.81833 7.18185C9.90272 7.26624 9.95013 7.3807 9.95013 7.50005C9.95013 7.6194 9.90272 7.73386 9.81833 7.81825L6.81833 10.8182C6.6426 10.994 6.35767 10.994 6.18194 10.8182C6.0062 10.6425 6.0062 10.3576 6.18194 10.1819L8.86374 7.50005L6.18194 4.81825C6.0062 4.64251 6.0062 4.35759 6.18194 4.18185Z"
+            fill="currentColor"
+          ></path>
+        </svg>
+      )}
+    </a>
+  );
+}
+
+function ProfilePage({ user, session, friends }: Props) {
   return (
     <div class="px-5 py-3 sm:px-10 xl:px-14">
       <NavBreadcrumbs urls={[{ name: 'Profile', url: '/profile' }]} />
@@ -108,12 +186,48 @@ function ProfilePage({ user, session }: Props) {
             <form method="POST" action="/auth/logout">
               <button
                 type="submit"
-                class="mr-2 mt-4 w-full rounded-xl bg-green-700 px-5 py-2.5 text-sm font-medium text-white transition-all hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-green-700 dark:hover:bg-green-800 dark:focus:ring-blue-800"
+                class="mb-0.5 mr-2 mt-4 w-full rounded-xl bg-green-700 px-5 py-2.5 text-sm font-medium text-white transition-all hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-green-700 dark:hover:bg-green-800 dark:focus:ring-blue-800"
               >
                 Log Out
               </button>
             </form>
           </div>
+          {friends && (
+            <div class="relative z-0 mt-3 flex w-full flex-col rounded-xl px-5 shadow-md dark:bg-zinc-900">
+              <h3 class="mx-2 text-xl font-bold">Friends</h3>
+              {friends.map((friend, index) => {
+                if (index > 2) return null;
+
+                if (friend.pending && friend.from.id === session.user.id)
+                  return (
+                    <Friend
+                      friend={friend}
+                      status={'pending'}
+                      useTo={friend.to.id !== session.user.id}
+                    />
+                  );
+                if (friend.from.id !== session.user.id && friend.pending)
+                  return (
+                    <Friend
+                      friend={friend}
+                      status={'toAccept'}
+                      useTo={friend.to.id !== session.user.id}
+                    />
+                  );
+                if (
+                  (friend.from.id === session.user.id && !friend.pending) ||
+                  (friend.to.id === session.user.id && !friend.pending)
+                )
+                  return (
+                    <Friend
+                      friend={friend}
+                      status={'accepted'}
+                      useTo={friend.to.id !== session.user.id}
+                    />
+                  );
+              })}
+            </div>
+          )}
         </div>
         <div class="w-full sm:w-1/2 lg:w-2/3">
           <div class="flex w-full flex-col rounded-xl p-7 shadow-md dark:bg-zinc-900">
@@ -149,6 +263,13 @@ function ProfilePage({ user, session }: Props) {
                   </p>
                 </span>
               )}
+              <Modal
+                trigger={<span>open</span>}
+                name="settings"
+                title="Trigger"
+              >
+                <span>content</span>
+              </Modal>
             </div>
           </div>
         </div>
