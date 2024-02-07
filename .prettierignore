@@ -185,3 +185,5 @@ database/
 .vercel/
 .vscode/
 .next/
+
+assets/
