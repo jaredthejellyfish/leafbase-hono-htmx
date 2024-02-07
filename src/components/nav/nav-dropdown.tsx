@@ -19,9 +19,9 @@ function NavDropdown({ pathname }: Props) {
   return (
     <div
       id="nav-dropdown"
-      class="transition-transform absolute left-0 top-[56px] z-50 w-screen origin-top px-4 py-2 bg-white shadow-lg rounded-b dark:bg-zinc-800/100 sm:top-16 sm:px-5 sm:py-3 scale-y-0"
+      class="transition-transform duration-300 absolute left-0 top-[56px] z-50 w-screen origin-top px-4 py-2 bg-white shadow-lg rounded-b dark:bg-zinc-800/100 sm:top-16 sm:px-5 sm:py-3 scale-y-0"
     >
-      <div class="relative flex-row items-center gap-3 rounded border border-zinc-400 bg-white px-10 py-1.5 pl-4 pr-5 text-black dark:border-zinc-700 dark:bg-zinc-700/60 md:hidden flex">
+      <div class="mb-2 relative flex-row items-center gap-3 rounded border border-zinc-400 bg-white px-10 py-1.5 pl-4 pr-5 text-black dark:border-zinc-700 dark:bg-zinc-700/60 md:hidden flex">
         <div
           class="w-full bg-white dark:bg-zinc-700 shadow-lg absolute top-12 left-0 z-50 rounded px-2 py-2 dark:text-white hidden"
           id="search-results-dropdown"
