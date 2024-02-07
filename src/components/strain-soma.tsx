@@ -1,5 +1,6 @@
-import { Strain } from "@/types";
-import Badge from "./badge";
+import Badge from '@c/badge';
+
+import { Strain } from '@/types';
 
 type Effect = {
   [key: string]: string;
@@ -10,64 +11,64 @@ type Props = {
 };
 
 const effects: Effect = {
-  aroused: "uninterested",
-  creative: "unimaginative",
-  energetic: "lethargic",
-  euphoric: "dysphoric",
-  focused: "distracted",
-  giggly: "serious",
-  happy: "sad",
-  hungry: "full",
-  relaxed: "tense",
-  sleepy: "alert",
-  talkative: "quiet",
-  tingly: "numb",
-  uplifted: "downcast",
+  aroused: 'uninterested',
+  creative: 'unimaginative',
+  energetic: 'lethargic',
+  euphoric: 'dysphoric',
+  focused: 'distracted',
+  giggly: 'serious',
+  happy: 'sad',
+  hungry: 'full',
+  relaxed: 'tense',
+  sleepy: 'alert',
+  talkative: 'quiet',
+  tingly: 'numb',
+  uplifted: 'downcast',
 };
 
 const positiveEffects: Effect = {
-  aroused: "low libido",
-  creative: "creative block",
-  energetic: "fatigue",
-  euphoric: "depression",
-  focused: "ADD",
-  giggly: "apathy",
-  happy: "sadness",
-  hungry: "loss of appetite",
-  relaxed: "anxiety",
-  sleepy: "insomnia",
-  talkative: "social anxiety",
-  tingly: "lack of sensation",
-  uplifted: "low mood",
+  aroused: 'low libido',
+  creative: 'creative block',
+  energetic: 'fatigue',
+  euphoric: 'depression',
+  focused: 'ADD',
+  giggly: 'apathy',
+  happy: 'sadness',
+  hungry: 'loss of appetite',
+  relaxed: 'anxiety',
+  sleepy: 'insomnia',
+  talkative: 'social anxiety',
+  tingly: 'lack of sensation',
+  uplifted: 'low mood',
 };
 
 const effectColors: Effect = {
-  aroused: "indigo",
-  uninterested: "yellow",
-  creative: "green",
-  unimaginative: "red",
-  energetic: "purple",
-  lethargic: "dark",
-  euphoric: "pink",
-  dysphoric: "default",
-  focused: "blue",
-  distracted: "orange",
-  giggly: "yellow",
-  serious: "default",
-  happy: "green",
-  sad: "red",
-  hungry: "purple",
-  full: "dark",
-  relaxed: "indigo",
-  tense: "yellow",
-  sleepy: "blue",
-  alert: "red",
-  talkative: "green",
-  quiet: "dark",
-  tingly: "pink",
-  numb: "default",
-  uplifted: "yellow",
-  downcast: "red",
+  aroused: 'indigo',
+  uninterested: 'yellow',
+  creative: 'green',
+  unimaginative: 'red',
+  energetic: 'purple',
+  lethargic: 'dark',
+  euphoric: 'pink',
+  dysphoric: 'default',
+  focused: 'blue',
+  distracted: 'orange',
+  giggly: 'yellow',
+  serious: 'default',
+  happy: 'green',
+  sad: 'red',
+  hungry: 'purple',
+  full: 'dark',
+  relaxed: 'indigo',
+  tense: 'yellow',
+  sleepy: 'blue',
+  alert: 'red',
+  talkative: 'green',
+  quiet: 'dark',
+  tingly: 'pink',
+  numb: 'default',
+  uplifted: 'yellow',
+  downcast: 'red',
 };
 
 function getTopThreeEffects(strain: Strain): string[] {
@@ -106,13 +107,13 @@ const StrainSoma = (props: Props) => {
   const { strain } = props;
   const topThreeEffects = getTopThreeEffects(strain);
   const topThreeEffectsNegative = getTopThreeEffectsNegative(strain).map(
-    (effect) => effects[effect]
+    (effect) => effects[effect],
   );
   const positives = getPositivesFromTopThree(strain);
 
   return (
     <div
-      class="flex flex-col gap-2 rounded border border-zinc-200 p-2 px-3 md:mt-7 dark:border-zinc-600 dark:bg-zinc-800"
+      class="flex flex-col gap-2 rounded border border-zinc-200 p-2 px-3 dark:border-zinc-600 dark:bg-zinc-800 md:mt-7"
       id="strain-soma"
     >
       <h3 class="text-sm font-bold uppercase">Strain soma</h3>
@@ -198,7 +199,7 @@ const StrainSoma = (props: Props) => {
                 strain?.effects?.relaxed?.score &&
                 `${Math.min(
                   Math.ceil(strain.effects.relaxed.score * 100),
-                  100
+                  100,
                 )}%`,
             }}
           ></div>
@@ -216,10 +217,10 @@ const StrainSoma = (props: Props) => {
                 Math.ceil(
                   Math.max(
                     0,
-                    Math.min(100, ((strain.thcPercent || 0 - 10) / 20) * 100)
-                  )
+                    Math.min(100, ((strain.thcPercent || 0 - 10) / 20) * 100),
+                  ),
                 ),
-                100
+                100,
               )}%`,
             }}
           ></div>

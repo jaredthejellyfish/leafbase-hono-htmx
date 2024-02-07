@@ -1,22 +1,25 @@
-import { Hono } from "hono";
-import { supabaseMiddleware } from "./supabase";
-import z from "zod";
-import RootLayout from "./layouts/layout";
-import VerifyPage from "./pages/verify";
+import { Hono } from 'hono';
+import z from 'zod';
+
+import RootLayout from '@l/layout';
+
+import VerifyPage from '@p/verify';
+
+import { supabaseMiddleware } from './supabase';
 
 export const authApp = new Hono();
 
-authApp.get("/login/provider", supabaseMiddleware, async (c) => {
+authApp.get('/login/provider', supabaseMiddleware, async (c) => {
   const { name } = c.req.query();
 
   const validName = z
-    .enum(["google", "github", "twitch", "discord"])
+    .enum(['google', 'github', 'twitch', 'discord'])
     .safeParse(name);
 
   const {
     data: { url: loginUrl },
   } = await c.var.supabase.auth.signInWithOAuth({
-    provider: validName.success ? validName.data : "google",
+    provider: validName.success ? validName.data : 'google',
     options: {
       redirectTo: `https://localhost:8787/auth/callback`,
     },
@@ -24,10 +27,10 @@ authApp.get("/login/provider", supabaseMiddleware, async (c) => {
   if (loginUrl !== null) {
     return c.redirect(loginUrl);
   }
-  return c.redirect("/auth/error");
+  return c.redirect('/auth/error');
 });
 
-authApp.post("/login/password", supabaseMiddleware, async (c) => {
+authApp.post('/login/password', supabaseMiddleware, async (c) => {
   const { email, password } = await c.req.parseBody();
 
   const validLogin = z
@@ -42,12 +45,12 @@ authApp.post("/login/password", supabaseMiddleware, async (c) => {
     password: validLogin.password,
   });
 
-  if (!error) return c.redirect("/profile");
+  if (!error) return c.redirect('/profile');
 
   return c.json({ error });
 });
 
-authApp.post("/signup", supabaseMiddleware, async (c) => {
+authApp.post('/signup', supabaseMiddleware, async (c) => {
   const { name, username, email, password, terms } = await c.req.parseBody();
 
   try {
@@ -83,43 +86,47 @@ authApp.post("/signup", supabaseMiddleware, async (c) => {
     });
 
     if (error) return c.redirect(`/signup?error=${error}`);
-    return c.redirect("/auth/verify");
+    return c.redirect('/auth/verify');
   } catch (error) {
     console.log(error);
     return c.redirect(`/signup?error=${error}`);
   }
 });
 
-authApp.get("/verify", supabaseMiddleware, async (c) => {
+authApp.get('/verify', supabaseMiddleware, async (c) => {
   return c.html(
-    <RootLayout title={"Verify Email - Leafbase"} c={c}>
+    <RootLayout
+      title={'Verify Email - Leafbase'}
+      description="Verify your email"
+      c={c}
+    >
       <VerifyPage />
-    </RootLayout>
+    </RootLayout>,
   );
 });
 
-authApp.get("/callback", supabaseMiddleware, async (c) => {
-  const code = c.req.query("code");
+authApp.get('/callback', supabaseMiddleware, async (c) => {
+  const code = c.req.query('code');
   if (code !== undefined) {
     const { error } = await c.var.supabase.auth.exchangeCodeForSession(code);
     if (error === null) {
-      return c.redirect("/profile");
+      return c.redirect('/profile');
     }
   }
-  return c.redirect("/auth/error");
+  return c.redirect('/auth/error');
 });
 
-authApp.post("/logout", supabaseMiddleware, async (c) => {
+authApp.post('/logout', supabaseMiddleware, async (c) => {
   await c.var.supabase.auth.signOut();
-  return c.redirect("/strains");
+  return c.redirect('/strains');
 });
 
-authApp.get("/error", async (c) => {
+authApp.get('/error', async (c) => {
   return c.html(
     <>
       <h1>ログインに失敗しました</h1>
       <p>再度ログインしてください。</p>
       <a href="/">トップに戻る</a>
-    </>
+    </>,
   );
 });

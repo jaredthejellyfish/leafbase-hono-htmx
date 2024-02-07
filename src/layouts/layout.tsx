@@ -1,18 +1,21 @@
-import Navigation from "@/components/nav";
-import NavDropdown from "@/components/nav/nav-dropdown";
-import { getProfile } from "@lb/utils";
-import { SupabaseClient } from "@supabase/supabase-js";
-import { Context, Env } from "hono";
+import { SupabaseClient } from '@supabase/supabase-js';
+import { Context, Env } from 'hono';
+
+import Navigation from '@c/nav';
+import NavDropdown from '@c/nav/nav-dropdown';
+
+import { getProfile } from '@lb/utils';
 
 type Props = {
   children: JSX.Element | JSX.Element[];
   title: string;
+  description: string;
   c:
     | Context<
         Env & {
           Variables: {
             // eslint-disable-next-line
-            supabase: SupabaseClient<any, "public", any>;
+            supabase: SupabaseClient<any, 'public', any>;
           };
         },
         string,
@@ -23,13 +26,13 @@ type Props = {
     | Context<Env, any, {}>;
 };
 
-async function RootLayout({ children, title, c }: Props) {
+async function RootLayout({ children, title, description, c }: Props) {
   const { profile } = await getProfile(c);
 
   const pathname = new URL(c.req.url).pathname;
 
   return (
-    <html class="dark">
+    <html lang="en" class="dark">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href="/favicon.ico" type="image/x-icon" />
@@ -37,6 +40,10 @@ async function RootLayout({ children, title, c }: Props) {
         <script src="https://unpkg.com/htmx.org@1.9.3"></script>
         <script src="https://unpkg.com/hyperscript.org@0.9.9"></script>
         <title>{title}</title>
+        <meta
+          name="description"
+          content={description ?? 'Leafbase is a cannabis strain database.'}
+        ></meta>
       </head>
       <body class="dark:bg-zinc-950 dark:text-white ">
         <Navigation profile={profile} />

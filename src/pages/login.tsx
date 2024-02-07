@@ -1,8 +1,6 @@
-
-
 function LoginPage() {
   return (
-    <main class="flex h-[85vh] items-center justify-center bg-zinc-50/50 px-4 dark:bg-zinc-950 sm:h-screen-bar sm:px-0">
+    <main class="sm:h-screen-bar flex h-[85vh] items-center justify-center bg-zinc-50/50 px-4 dark:bg-zinc-950 sm:px-0">
       <div class="mx-auto max-w-sm space-y-3 rounded-lg bg-white p-5 shadow-xl dark:bg-zinc-900 sm:p-8">
         <div class="space-y-2 text-center">
           <h2 class="mt-6 text-center text-3xl font-extrabold text-zinc-900 dark:text-white">
@@ -21,7 +19,7 @@ function LoginPage() {
               Email
             </label>
             <input
-              class="flex h-10 w-full rounded-md border border-input px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-black"
+              class="border-input ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm text-black file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               id="email"
               name="email"
               placeholder="m@example.com"
@@ -37,7 +35,7 @@ function LoginPage() {
               Password
             </label>
             <input
-              class="text-black flex h-10 w-full rounded-md border border-input px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              class="border-input ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm text-black file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               id="password"
               name="password"
               required={true}
@@ -64,12 +62,12 @@ function LoginPage() {
           <div class="flex justify-center space-x-4">
             <a
               href="/auth/login/provider?name=google"
-              class="cursor-pointer whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 flex size-14 items-center justify-center border border-zinc-400 text-white dark:border-zinc-600 dark:bg-zinc-700"
+              class="ring-offset-background focus-visible:ring-ring hover:bg-accent hover:text-accent-foreground flex size-14 h-10 cursor-pointer items-center justify-center whitespace-nowrap rounded-md border border-zinc-400 px-4 py-2 text-sm font-medium text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:border-zinc-600 dark:bg-zinc-700"
               variant="outline"
             >
               <img
-                src={"/static/google.png"}
-                alt={"Google logo"}
+                src={'/static/google.png'}
+                alt={'Google logo'}
                 width={40}
                 height={40}
                 priority={true}
@@ -77,13 +75,13 @@ function LoginPage() {
             </a>
             <a
               href="/auth/login/provider?name=github"
-              class="whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 flex size-14 items-center justify-center border border-zinc-400 text-white dark:border-zinc-600 dark:bg-zinc-700 cursor-pointer"
+              class="ring-offset-background focus-visible:ring-ring hover:bg-accent hover:text-accent-foreground flex size-14 h-10 cursor-pointer items-center justify-center whitespace-nowrap rounded-md border border-zinc-400 px-4 py-2 text-sm font-medium text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:border-zinc-600 dark:bg-zinc-700"
               variant="outline"
             >
               <img
-                class={"dark:invert"}
-                src={"/static/github.png"}
-                alt={"Github logo"}
+                class={'dark:invert'}
+                src={'/static/github.png'}
+                alt={'Github logo'}
                 width={40}
                 height={40}
                 priority={true}
@@ -91,7 +89,7 @@ function LoginPage() {
             </a>
             <a
               href="/auth/login/provider?name=discord"
-              class="whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 flex size-14 items-center justify-center border border-zinc-400 text-white dark:border-zinc-600 dark:bg-zinc-700"
+              class="ring-offset-background focus-visible:ring-ring hover:bg-accent hover:text-accent-foreground flex size-14 h-10 items-center justify-center whitespace-nowrap rounded-md border border-zinc-400 px-4 py-2 text-sm font-medium text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:border-zinc-600 dark:bg-zinc-700"
               variant="outline"
             >
               <svg
@@ -111,7 +109,7 @@ function LoginPage() {
             </a>
             <a
               href="/auth/login/provider?name=twitch"
-              class="whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 flex size-14 items-center justify-center border border-zinc-400 text-white dark:border-zinc-600 dark:bg-zinc-700"
+              class="ring-offset-background focus-visible:ring-ring hover:bg-accent hover:text-accent-foreground flex size-14 h-10 items-center justify-center whitespace-nowrap rounded-md border border-zinc-400 px-4 py-2 text-sm font-medium text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:border-zinc-600 dark:bg-zinc-700"
               variant="outline"
             >
               <svg
@@ -119,7 +117,7 @@ function LoginPage() {
                 height="30px"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 127.14 96.36"
-                style={{ fill: "#7289DA" }}
+                style={{ fill: '#7289DA' }}
               >
                 <g id="Discord_Logos" data-name="Discord Logos">
                   <g

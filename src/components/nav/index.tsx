@@ -1,18 +1,18 @@
-import { Profile } from "@/types";
+import { Profile } from '@/types';
 
 type Props = { profile: Profile | null };
 
 async function Navigation({ profile }: Props) {
   return (
-    <nav class="flex h-14 items-center justify-between bg-gray-100 px-6 sm:h-16 dark:bg-zinc-900 z-20">
+    <nav class="z-20 flex h-14 items-center justify-between bg-gray-100 px-6 dark:bg-zinc-900 sm:h-16">
       <div>
         <a
           href="/"
           class="flex items-center justify-start gap-2.5 text-xl sm:gap-4"
         >
           <img
-            class="aspect-square rounded-sm border border-zinc-300 bg-white sm:scale-125 dark:border-zinc-700 dark:bg-zinc-700/60"
-            src={"/static/site-logo.png"}
+            class="aspect-square rounded-sm border border-zinc-300 bg-white dark:border-zinc-700 dark:bg-zinc-700/60 sm:scale-125"
+            src={'/static/site-logo.png'}
             height={33}
             width={33}
             alt="site logo"
@@ -20,15 +20,15 @@ async function Navigation({ profile }: Props) {
           <span class="text-base font-medium sm:text-xl">Leafbase</span>
         </a>
       </div>
-      <div class="flex flex-row items-center gap-3 sm:gap-5 relative">
+      <div class="relative flex flex-row items-center gap-3 sm:gap-5">
         <div
-          class="relative flex-row items-center gap-3 rounded border border-zinc-400 bg-white px-10 py-1.5 pl-4 pr-5 text-black dark:border-zinc-700 dark:bg-zinc-700/60 hidden md:flex"
+          class="relative hidden flex-row items-center gap-3 rounded border border-zinc-400 bg-white px-10 py-1.5 pl-4 pr-5 text-black dark:border-zinc-700 dark:bg-zinc-700/60 md:flex"
           _="on click 
           remove .scale-y-100 from #nav-dropdown 
           add .scale-y-0 to #nav-dropdown"
         >
           <div
-            class="w-full bg-white dark:bg-zinc-700 shadow-lg absolute top-12 left-0 z-50 rounded px-2 py-2 dark:text-white hidden"
+            class="absolute left-0 top-12 z-50 hidden w-full rounded bg-white px-2 py-2 shadow-lg dark:bg-zinc-700 dark:text-white"
             id="search-results"
           />
 
@@ -63,7 +63,7 @@ async function Navigation({ profile }: Props) {
             viewBox="0 0 24 24"
             id="search-close-icon"
             _="on click set #search-input's value to '' then add .hidden to #search-close-icon then remove .hidden from #search-icon then add .hidden to #search-results"
-            class="text-black dark:text-zinc-400 hidden cursor-pointer"
+            class="hidden cursor-pointer text-black dark:text-zinc-400"
             height="22px"
             width="22px"
             xmlns="http://www.w3.org/2000/svg"
@@ -77,13 +77,13 @@ async function Navigation({ profile }: Props) {
           xmlns="http://www.w3.org/2000/svg"
           width="10"
           height="20"
-          class="hidden stroke-black md:block dark:stroke-white"
+          class="hidden stroke-black dark:stroke-white md:block"
         >
           <line x1="5" y1="0" x2="5" y2="200" strokeWidth="1.3" />
         </svg>
         <button
           id="theme-button"
-          class="w-6 h-6 flex items-center justify-center"
+          class="flex h-6 w-6 items-center justify-center"
           _="on click toggle .hidden on #theme-sun then toggle .hidden on #theme-moon"
         >
           <svg
@@ -130,7 +130,7 @@ async function Navigation({ profile }: Props) {
         <a href="/profile" class="text-base font-medium sm:text-xl">
           {!profile?.image ? (
             <svg
-              class="rounded-full aspect-square border border-zinc-300 bg-white dark:border-zinc-700 dark:bg-zinc-700/60"
+              class="aspect-square rounded-full border border-zinc-300 bg-white dark:border-zinc-700 dark:bg-zinc-700/60"
               version="1.1"
               id="svg2"
               width="36"
@@ -175,7 +175,7 @@ async function Navigation({ profile }: Props) {
             </svg>
           ) : (
             <img
-              class="rounded-full aspect-square border border-zinc-300 bg-white dark:border-zinc-700 dark:bg-zinc-700/60"
+              class="aspect-square rounded-full border border-zinc-300 bg-white dark:border-zinc-700 dark:bg-zinc-700/60"
               src={profile?.image}
               height={36}
               width={36}

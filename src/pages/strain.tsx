@@ -1,8 +1,10 @@
-import StarRating from "@c/star-rating";
-import { effects, terpenes } from "@lb/data/colors";
-import StrainSoma from "@c/strain-soma";
-import NavBreadcrumbs from "@c/nav-breadcrumbs";
-import { Strain } from "@/types";
+import NavBreadcrumbs from '@c/nav-breadcrumbs';
+import StarRating from '@c/star-rating';
+import StrainSoma from '@c/strain-soma';
+
+import { effects, terpenes } from '@lb/data/colors';
+
+import { Strain } from '@/types';
 
 type Props = { strain: Strain };
 
@@ -11,7 +13,7 @@ async function StrainPage({ strain }: Props) {
     <main class="justify-center px-5 py-3 md:px-16">
       <NavBreadcrumbs
         urls={[
-          { name: "Strains", url: "/strains" },
+          { name: 'Strains', url: '/strains' },
           {
             name: strain.name as string,
             url: `/strains/${strain.slug}`, // <- /strain
@@ -28,7 +30,7 @@ async function StrainPage({ strain }: Props) {
         >
           <div
             id="vertical-1"
-            class="flex h-52 items-center justify-center rounded-sm md:w-1/3 md:border md:dark:border-neutral-700 md:shadow-sm md:dark:bg-zinc-950/10 md:dark:shadow"
+            class="flex h-52 items-center justify-center rounded-sm md:w-1/3 md:border md:shadow-sm md:dark:border-neutral-700 md:dark:bg-zinc-950/10 md:dark:shadow"
           >
             <img
               class="rounded"
@@ -74,7 +76,7 @@ async function StrainPage({ strain }: Props) {
                 <div
                   style={{
                     backgroundColor:
-                      effects[strain.topEffect || "rgb(70, 130, 180)"],
+                      effects[strain.topEffect || 'rgb(70, 130, 180)'],
                   }}
                   class="h-2.5 w-2.5 rounded-full"
                 ></div>
@@ -84,7 +86,7 @@ async function StrainPage({ strain }: Props) {
                 <div
                   style={{
                     backgroundColor:
-                      terpenes[strain.topTerpene || "rgb(70, 130, 180)"],
+                      terpenes[strain.topTerpene || 'rgb(70, 130, 180)'],
                   }}
                   class="h-2.5 w-2.5 rounded-full"
                 ></div>

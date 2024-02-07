@@ -2,16 +2,16 @@ type Props = { pathname: string };
 
 const paths = [
   {
-    name: "Strains",
-    path: "/strains",
+    name: 'Strains',
+    path: '/strains',
   },
   {
-    name: "Dispensaries",
-    path: "/dispensaries",
+    name: 'Dispensaries',
+    path: '/dispensaries',
   },
   {
-    name: "About Us",
-    path: "/about",
+    name: 'About Us',
+    path: '/about',
   },
 ];
 
@@ -19,11 +19,11 @@ function NavDropdown({ pathname }: Props) {
   return (
     <div
       id="nav-dropdown"
-      class="transition-transform duration-300 absolute left-0 top-[56px] z-50 w-screen origin-top px-4 py-2 bg-white shadow-lg rounded-b dark:bg-zinc-800/100 sm:top-16 sm:px-5 sm:py-3 scale-y-0"
+      class="absolute left-0 top-[56px] z-50 w-screen origin-top scale-y-0 rounded-b bg-white px-4 py-2 shadow-lg transition-transform duration-300 dark:bg-zinc-800/100 sm:top-16 sm:px-5 sm:py-3"
     >
-      <div class="mb-2 relative flex-row items-center gap-3 rounded border border-zinc-400 bg-white px-10 py-1.5 pl-4 pr-5 text-black dark:border-zinc-700 dark:bg-zinc-700/60 md:hidden flex">
+      <div class="relative mb-2 flex flex-row items-center gap-3 rounded border border-zinc-400 bg-white px-10 py-1.5 pl-4 pr-5 text-black dark:border-zinc-700 dark:bg-zinc-700/60 md:hidden">
         <div
-          class="w-full bg-white dark:bg-zinc-700 shadow-lg absolute top-12 left-0 z-50 rounded px-2 py-2 dark:text-white hidden"
+          class="absolute left-0 top-12 z-50 hidden w-full rounded bg-white px-2 py-2 shadow-lg dark:bg-zinc-700 dark:text-white"
           id="search-results-dropdown"
         />
 
@@ -58,7 +58,7 @@ function NavDropdown({ pathname }: Props) {
           viewBox="0 0 24 24"
           id="search-close-icon-dropdown"
           _="on click set #search-input-dropdown's value to '' then add .hidden to #search-close-icon-dropdown then remove .hidden from #search-icon-dropdown then add .hidden to #search-results-dropdown"
-          class="text-black dark:text-zinc-400 hidden cursor-pointer"
+          class="hidden cursor-pointer text-black dark:text-zinc-400"
           height="22px"
           width="22px"
           xmlns="http://www.w3.org/2000/svg"
@@ -74,7 +74,7 @@ function NavDropdown({ pathname }: Props) {
             class="hover:background-slate-200 flex h-10 w-full cursor-pointer items-center justify-start py-5 pl-3.5 text-base font-medium transition-colors dark:hover:bg-zinc-800 sm:text-lg md:pl-10"
           >
             <a
-              class={`w-full ${pathname === path.path ? "text-green-500" : ""}`}
+              class={`w-full ${pathname === path.path ? 'text-green-500' : ''}`}
               href={path.path}
             >
               {path.name}
@@ -85,7 +85,7 @@ function NavDropdown({ pathname }: Props) {
               xmlns="http://www.w3.org/2000/svg"
               width="100%"
               height="1"
-              class="stroke-zinc-300 dark:stroke-zinc-600 my-0.5"
+              class="my-0.5 stroke-zinc-300 dark:stroke-zinc-600"
             >
               <line x1="0" y1="0.5" x2="100%" y2="0.5" stroke-width="1" />
             </svg>

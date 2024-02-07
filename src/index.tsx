@@ -1,62 +1,76 @@
-import { Hono } from "hono";
-import AllStrains from "@p/all-strains";
-import RootLayout from "@l/layout";
-import StrainCard from "@c/strain-card";
-import StrainPage from "@p/strain";
-import { serveStatic } from "hono/cloudflare-workers";
-import { z } from "zod";
-import { getPaginatedStrains, getProfile } from "@lb/utils";
-import { authApp } from "./auth";
-import { supabaseMiddleware } from "./supabase";
-import ProfilePage from "@p/profile";
-import LoginPage from "@p/login";
-import SignupPage from "@p/signup";
-import { Strain } from "./types";
-import { PostgrestError } from "@supabase/supabase-js";
+import { PostgrestError } from '@supabase/supabase-js';
+import { Hono } from 'hono';
+import { serveStatic } from 'hono/cloudflare-workers';
+import z from 'zod';
 
-const filterQuery = z.enum(["re", "az", "za", "sr"]);
+import RootLayout from '@l/layout';
+
+import { getProfile } from '@lb/utils';
+
+import AllStrains from '@p/all-strains';
+import LoginPage from '@p/login';
+import ProfilePage from '@p/profile';
+import SignupPage from '@p/signup';
+import StrainPage from '@p/strain';
+
+import { apiApp } from './api';
+import { authApp } from './auth';
+import { supabaseMiddleware } from './supabase';
+import { Strain } from './types';
 
 const app = new Hono();
 
-app.get("/", async (c) => {
-  return c.redirect("/strains");
+app.get('/', async (c) => {
+  return c.redirect('/strains');
 });
 
-app.get("/login", supabaseMiddleware, async (c) => {
+app.get('/login', supabaseMiddleware, async (c) => {
   return c.html(
-    <RootLayout title={"Login - Leafbase"} c={c}>
+    <RootLayout
+      title={'Login - Leafbase'}
+      description="Login page for leafbase.xyz"
+      c={c}
+    >
       <LoginPage />
-    </RootLayout>
+    </RootLayout>,
   );
 });
 
-app.get("/signup", supabaseMiddleware, async (c) => {
+app.get('/signup', supabaseMiddleware, async (c) => {
   return c.html(
-    <RootLayout title={"Login - Leafbase"} c={c}>
+    <RootLayout
+      title={'Sign up - Leafbase'}
+      description="Signup page for leafbase.xyz"
+      c={c}
+    >
       <SignupPage />
-    </RootLayout>
+    </RootLayout>,
   );
 });
 
-app.get("/strains", supabaseMiddleware, async (c) => {
+app.get('/strains', supabaseMiddleware, async (c) => {
   const { filter } = c.req.query();
 
-  const parsedFilter = filterQuery.safeParse(filter);
+  const parsedFilter = z.enum(['re', 'az', 'za', 'sr']).safeParse(filter);
 
   return c.html(
-    <RootLayout title={"All Strains - Leafbase"} c={c}>
-      <AllStrains filter={parsedFilter.success ? parsedFilter.data : "re"} />
-    </RootLayout>
+    <RootLayout
+      title={'All Strains - Leafbase'}
+      description="Signup page for leafbase.xyz"
+      c={c}
+    >
+      <AllStrains filter={parsedFilter.success ? parsedFilter.data : 're'} />
+    </RootLayout>,
   );
 });
 
-app.get("/strains/:strain", supabaseMiddleware, async (c) => {
+app.get('/strains/:strain', supabaseMiddleware, async (c) => {
   const { strain: slug } = c.req.param();
 
   const { data: strain, error } = (await c.var.supabase
-    .from("strains")
-    .select("*")
-    .eq("slug", slug)
+    .from('strains')
+    .select('*')
+    .eq('slug', slug)
     .single()) as { data: Strain; error: PostgrestError | null };
 
   if (error) {
@@ -64,157 +78,46 @@ app.get("/strains/:strain", supabaseMiddleware, async (c) => {
   }
 
   return c.html(
-    <RootLayout title={`${strain.name} - Leafbase`} c={c}>
+    <RootLayout
+      title={`${strain.name} - Leafbase`}
+      description={strain.shortDescription || `Strain page for ${strain.name}.`}
+      c={c}
+    >
       <StrainPage strain={strain} />
-    </RootLayout>
+    </RootLayout>,
   );
 });
 
-app.get("/profile", supabaseMiddleware, async (c) => {
+app.get('/profile', supabaseMiddleware, async (c) => {
   const { profile, session } = await getProfile(c);
 
   if (!profile || !session) {
-    return c.redirect("/login");
+    return c.redirect('/login');
   }
 
   return c.html(
-    <RootLayout title={`Profile - Leafbase`} c={c}>
+    <RootLayout
+      title={`Profile - Leafbase`}
+      description={`Profile page for ${profile.username}.`}
+      c={c}
+    >
       <ProfilePage user={profile} session={session} />
-    </RootLayout>
-  );
-});
-
-app.post("/api/search", supabaseMiddleware, async (c) => {
-  const { search } = await c.req.parseBody();
-  const { type } = c.req.query();
-
-  const parsedSearch = z
-    .object({
-      search: z.string().max(40),
-      type: z.enum(["main", "dropdown"]).nullable().default("main"),
-    })
-    .safeParse({ search, type });
-
-  if (!search)
-    return c.html(
-      <div
-        class="w-full bg-white dark:bg-zinc-700 shadow-lg absolute top-12 left-0 z-50 rounded px-2 py-2 dark:text-white hidden"
-        id={
-          parsedSearch.success && parsedSearch.data.type === "main"
-            ? "search-results"
-            : "search-results-dropdown"
-        }
-      />
-    );
-
-  const { data: searchResults, error } = await c.var.supabase.rpc(
-    "search_strains",
-    {
-      search_term: parsedSearch.success ? parsedSearch.data.search : "",
-      limit_num: 5,
-    }
-  );
-
-  if (error) {
-    return c.html(
-      <div
-        class="w-full bg-white dark:bg-zinc-700 shadow-lg absolute top-12 left-0 z-50 rounded px-2 py-2 dark:text-white"
-        id={
-          parsedSearch.success && parsedSearch.data.type === "main"
-            ? "search-results"
-            : "search-results-dropdown"
-        }
-      >
-        <p>Error getting search results</p>
-      </div>
-    );
-  }
-
-  return c.html(
-    searchResults && searchResults.length ? (
-      <div
-        class="w-full bg-white dark:bg-zinc-700 shadow-lg absolute top-12 left-0 z-50 rounded px-2 py-2 dark:text-white"
-        id={
-          parsedSearch.success && parsedSearch.data.type === "main"
-            ? "search-results"
-            : "search-results-dropdown"
-        }
-      >
-        {searchResults.map((strain, index) => (
-          <>
-            {index !== 0 && (
-              <div class="border-b border-gray-300 dark:border-gray-600"></div>
-            )}
-            <a
-              href={`/strains/${strain.slug}`}
-              class="flex flex-col items-start"
-            >
-              <div class="flex flex-row items-center gap-2">
-                <img
-                  src={strain.nugimage}
-                  alt={strain.name}
-                  width={60}
-                  height={60}
-                />
-                <span>{strain.name}</span>
-              </div>
-            </a>
-          </>
-        ))}
-      </div>
-    ) : (
-      <div
-        class="w-full bg-white dark:bg-zinc-700 shadow-lg absolute top-12 left-0 z-50 rounded px-2 py-2 dark:text-white hidden"
-        id={
-          parsedSearch.success && parsedSearch.data.type === "main"
-            ? "search-results"
-            : "search-results-dropdown"
-        }
-      />
-    )
-  );
-});
-
-app.get("/api/strains", supabaseMiddleware, async (c) => {
-  const { page, filter } = c.req.query();
-
-  if (!page) {
-    return c.html(<p>No page param provided.</p>);
-  }
-
-  const parsedFilter = filterQuery.safeParse(filter);
-
-  const { strains } = await getPaginatedStrains(
-    parsedFilter.success ? parsedFilter.data : "re",
-    Number(page)
-  );
-
-  return c.html(
-    <>
-      {strains &&
-        strains.map((strain, index) => (
-          <StrainCard
-            strain={strain}
-            filter={parsedFilter.success ? parsedFilter.data : "re"}
-            loadMore={index === strains.length - 1}
-            page={Number(page) + 1}
-          />
-        ))}
-    </>
+    </RootLayout>,
   );
 });
 
 app.notFound(async (c) => {
   return c.html(
-    <RootLayout title={"404 - Leafbase"} c={c}>
+    <RootLayout title={'404 - Leafbase'} c={c}>
       <span>Page not found</span>
-    </RootLayout>
+    </RootLayout>,
   );
 });
 
-app.get("/static/*", serveStatic({ root: "./" }));
-app.get("/favicon.ico", serveStatic({ path: "./favicon.ico" }));
+app.get('/static/*', serveStatic({ root: './' }));
+app.get('/favicon.ico', serveStatic({ path: './favicon.ico' }));
 
-app.route("/auth", authApp);
+app.route('/auth', authApp);
+app.route('/api', apiApp);
 
 export default app;

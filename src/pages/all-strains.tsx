@@ -1,15 +1,16 @@
-import StrainCard from "@c/strain-card";
-import { cn, getPaginatedStrains } from "@lb/utils";
+import StrainCard from '@c/strain-card';
+
+import { cn, getPaginatedStrains } from '@lb/utils';
 
 type Props = {
-  filter: "re" | "az" | "za" | "sr";
+  filter: 're' | 'az' | 'za' | 'sr';
 };
 
 const filters = {
-  re: "Recommended",
-  az: "A-Z",
-  za: "Z-A",
-  sr: "Star Rating",
+  re: 'Recommended',
+  az: 'A-Z',
+  za: 'Z-A',
+  sr: 'Star Rating',
 };
 
 export default async function AllStrains({ filter }: Props) {
@@ -34,10 +35,10 @@ export default async function AllStrains({ filter }: Props) {
             _="on click from elsewhere add .opacity-0 to #sort-modal"
           >
             <span class="mt-4 text-xs text-zinc-400">{6330} strains</span>
-            <span class="mt-4 flex min-w-20 flex-row items-center justify-end gap-1 text-xs text-zinc-400 relative">
+            <span class="relative mt-4 flex min-w-20 flex-row items-center justify-end gap-1 text-xs text-zinc-400">
               Sort by
               <span
-                class="flex cursor-pointer flex-row items-center text-zinc-500 dark:text-zinc-300 relative"
+                class="relative flex cursor-pointer flex-row items-center text-zinc-500 dark:text-zinc-300"
                 _="on click toggle .scale-0 on #sort-modal then toggle .opacity-0 on #sort-modal"
               >
                 {filters[filter]}
@@ -60,14 +61,14 @@ export default async function AllStrains({ filter }: Props) {
                 </svg>
               </span>
               <div
-                class="absolute bg-zinc-800 top-0 z-50 mt-5 rounded-md p-0.5 scale-0 opacity-0 transition-opacity duration-200"
+                class="absolute top-0 z-50 mt-5 scale-0 rounded-md bg-zinc-800 p-0.5 opacity-0 transition-opacity duration-200"
                 id="sort-modal"
               >
                 <a
                   href="/strains?filter=re"
                   class={cn(
-                    "filter-item flex w-full items-start rounded p-3 hover:bg-zinc-100/80 dark:dark:hover:bg-zinc-500 pr-3",
-                    filter === "re" && "text-green-500"
+                    'filter-item flex w-full items-start rounded p-3 pr-3 hover:bg-zinc-100/80 dark:dark:hover:bg-zinc-500',
+                    filter === 're' && 'text-green-500',
                   )}
                 >
                   Recommended
@@ -75,8 +76,8 @@ export default async function AllStrains({ filter }: Props) {
                 <a
                   href="/strains?filter=az"
                   class={cn(
-                    "filter-item flex w-full items-start rounded p-3 hover:bg-zinc-100/80 dark:hover:bg-zinc-500 pr-3",
-                    filter === "az" && "text-green-500"
+                    'filter-item flex w-full items-start rounded p-3 pr-3 hover:bg-zinc-100/80 dark:hover:bg-zinc-500',
+                    filter === 'az' && 'text-green-500',
                   )}
                 >
                   A-Z
@@ -84,8 +85,8 @@ export default async function AllStrains({ filter }: Props) {
                 <a
                   href="/strains?filter=za"
                   class={cn(
-                    "filter-item flex w-full items-start rounded p-3 hover:bg-zinc-100/80 dark:hover:bg-zinc-500 pr-3",
-                    filter === "za" && "text-green-500"
+                    'filter-item flex w-full items-start rounded p-3 pr-3 hover:bg-zinc-100/80 dark:hover:bg-zinc-500',
+                    filter === 'za' && 'text-green-500',
                   )}
                 >
                   Z-A
@@ -93,8 +94,8 @@ export default async function AllStrains({ filter }: Props) {
                 <a
                   href="/strains?filter=sr"
                   class={cn(
-                    "filter-item flex w-full items-start rounded p-3 hover:bg-zinc-100/80 dark:hover:bg-zinc-500 pr-3",
-                    filter === "sr" && "text-green-500"
+                    'filter-item flex w-full items-start rounded p-3 pr-3 hover:bg-zinc-100/80 dark:hover:bg-zinc-500',
+                    filter === 'sr' && 'text-green-500',
                   )}
                 >
                   Star Rating
@@ -110,7 +111,7 @@ export default async function AllStrains({ filter }: Props) {
         <div class="flex w-full flex-col items-center justify-center gap-4">
           <div
             id="response-div"
-            class="relative grid gap-x-4 md:grid-cols-3 xl:grid-cols-4 gap-y-4 mt-4"
+            class="relative mt-4 grid gap-x-4 gap-y-4 md:grid-cols-3 xl:grid-cols-4"
           >
             {strains &&
               strains.map((strain, index) => (

@@ -1,28 +1,31 @@
-import { Profile } from "@/types";
-import NavBreadcrumbs from "@c/nav-breadcrumbs";
-import { cn } from "@lb/utils";
-import { Session } from "@supabase/supabase-js";
-import { format } from "date-fns";
+import { Session } from '@supabase/supabase-js';
+import { format } from 'date-fns';
+
+import NavBreadcrumbs from '@c/nav-breadcrumbs';
+
+import { cn } from '@lb/utils';
+
+import { Profile } from '@/types';
 
 type Props = { user: Profile; session: Session };
 
 export const languages = [
-  { label: "English", value: "en" },
-  { label: "French", value: "fr" },
-  { label: "German", value: "de" },
-  { label: "Spanish", value: "es" },
-  { label: "Portuguese", value: "pt" },
-  { label: "Russian", value: "ru" },
-  { label: "Japanese", value: "ja" },
-  { label: "Korean", value: "ko" },
-  { label: "Chinese", value: "zh" },
+  { label: 'English', value: 'en' },
+  { label: 'French', value: 'fr' },
+  { label: 'German', value: 'de' },
+  { label: 'Spanish', value: 'es' },
+  { label: 'Portuguese', value: 'pt' },
+  { label: 'Russian', value: 'ru' },
+  { label: 'Japanese', value: 'ja' },
+  { label: 'Korean', value: 'ko' },
+  { label: 'Chinese', value: 'zh' },
 ] as const;
 
 function ProfilePage({ user, session }: Props) {
   return (
-    <div class="px-5 sm:px-10 xl:px-14 py-3">
-      <NavBreadcrumbs urls={[{ name: "Profile", url: "/profile" }]} />
-      <div class={"flex flex-col sm:flex-row gap-x-4 gap-y-3"}>
+    <div class="px-5 py-3 sm:px-10 xl:px-14">
+      <NavBreadcrumbs urls={[{ name: 'Profile', url: '/profile' }]} />
+      <div class={'flex flex-col gap-x-4 gap-y-3 sm:flex-row'}>
         <div class="w-full sm:w-1/2 lg:w-1/3">
           <div class="relative z-0 flex w-full flex-col rounded-xl px-7 pt-6 shadow-md dark:bg-zinc-900">
             {user.image && (
@@ -37,7 +40,7 @@ function ProfilePage({ user, session }: Props) {
               />
             )}
             <span
-              class={cn("mt-2 text-lg font-bold", !user?.name ? "mt-0" : "")}
+              class={cn('mt-2 text-lg font-bold', !user?.name ? 'mt-0' : '')}
             >
               {user?.name}
               {user?.pronouns && (
@@ -118,19 +121,19 @@ function ProfilePage({ user, session }: Props) {
             <>
               <span class="mt-3 text-sm dark:text-white">About me</span>
               <p class="mt-1 text-sm text-zinc-400 lg:w-4/5">
-                {user?.about || "Add a bio in the edit page."}
+                {user?.about || 'Add a bio in the edit page.'}
               </p>
             </>
             <div
               class={`flex flex-col justify-between ${
-                user?.about && "mt-6"
+                user?.about && 'mt-6'
               } md:w-4/5 md:flex-row`}
             >
               {user.birth_date && (
                 <span class="mt-3 text-sm dark:text-white">
                   Birthday:
                   <p class="w-60 text-gray-400">
-                    {`${format(new Date(user?.birth_date), "PP")}`}
+                    {`${format(new Date(user?.birth_date), 'PP')}`}
                   </p>
                 </span>
               )}
@@ -140,7 +143,7 @@ function ProfilePage({ user, session }: Props) {
                   <p class="w-60 text-gray-400">
                     {
                       languages.find(
-                        (language) => language.value === user?.language
+                        (language) => language.value === user?.language,
                       )?.label
                     }
                   </p>

@@ -41,7 +41,7 @@ export type FriendExtended = {
     image: string;
   };
   pending: boolean;
-}
+};
 
 export type Profile = Database['public']['Tables']['profiles']['Row'];
 

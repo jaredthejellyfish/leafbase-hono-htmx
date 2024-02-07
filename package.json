@@ -15,11 +15,14 @@
     "tailwind-merge": "^2.2.1"
   },
   "devDependencies": {
+    "prettier": "^3.2.5",
     "@cloudflare/workers-types": "^4.20240129.0",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
     "eslint": "^8.56.0",
     "eslint-plugin-react": "^7.33.2",
+    "prettier-plugin-tailwindcss": "^0.5.11",
     "wrangler": "^3.25.0"
   }
 }
