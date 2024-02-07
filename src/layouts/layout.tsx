@@ -42,7 +42,6 @@ async function RootLayout({ children, title, c }: Props) {
         <Navigation profile={profile} />
         <NavDropdown pathname={pathname} />
         {children}
-        <script src="/static/navigation.js" />
       </body>
     </html>
   );
