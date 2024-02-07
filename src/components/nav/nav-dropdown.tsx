@@ -20,17 +20,24 @@ function NavDropdown({ pathname }: Props) {
     <div
       id="nav-dropdown"
       class="transition-transform absolute left-0 top-[56px] z-50 w-screen origin-top px-4 py-2 bg-white shadow-lg rounded-b dark:bg-zinc-800/100 sm:top-16 sm:px-5 sm:py-3 scale-y-0"
-      initial="closed"
     >
-      <div class="mb-2 flex flex-row items-center gap-3 rounded border border-zinc-400 bg-white px-10 py-1.5 pl-4 pr-5 text-black dark:border-zinc-700 dark:bg-zinc-700/60 md:hidden">
+      <div class="relative flex-row items-center gap-3 rounded border border-zinc-400 bg-white px-10 py-1.5 pl-4 pr-5 text-black dark:border-zinc-700 dark:bg-zinc-700/60 md:hidden flex">
+        <div
+          class="w-full bg-white dark:bg-zinc-700 shadow-lg absolute top-12 left-0 z-50 rounded px-2 py-2 dark:text-white hidden"
+          id="search-results-dropdown"
+        />
+
         <input
           id="search-input-dropdown"
-          type="text"
+          name="search"
           placeholder="Search..."
           _="on keyup if my value's length > 0 then remove .hidden from #search-close-icon-dropdown then add .hidden to #search-icon-dropdown else add .hidden to #search-close-icon-dropdown then remove .hidden from #search-icon-dropdown"
           class="w-full bg-transparent focus:outline-none dark:text-white"
+          hx-post="/api/search?type=dropdown"
+          hx-trigger="input changed delay:500ms, search"
+          hx-target="#search-results-dropdown"
+          hx-swap="outerHTML"
         ></input>
-
         <svg
           id="search-icon-dropdown"
           class="text-black dark:text-zinc-400"
@@ -50,7 +57,7 @@ function NavDropdown({ pathname }: Props) {
           stroke-width="0"
           viewBox="0 0 24 24"
           id="search-close-icon-dropdown"
-          _="on click set #search-input-dropdown's value to '' then add .hidden to #search-close-icon-dropdown then remove .hidden from #search-icon-dropdown"
+          _="on click set #search-input-dropdown's value to '' then add .hidden to #search-close-icon-dropdown then remove .hidden from #search-icon-dropdown then add .hidden to #search-results-dropdown"
           class="text-black dark:text-zinc-400 hidden cursor-pointer"
           height="22px"
           width="22px"

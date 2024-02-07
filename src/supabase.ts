@@ -6,7 +6,8 @@ import { getCookie, setCookie, deleteCookie } from "hono/cookie";
 
 export const supabaseMiddleware: MiddlewareHandler<{
   Variables: {
-    supabase: SupabaseClient;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    supabase: SupabaseClient<Database, "public", any>;
   };
 }> = async (c, next) => {
   const client = createServerClient<Database>(

@@ -20,16 +20,29 @@ async function Navigation({ profile }: Props) {
           <span class="text-base font-medium sm:text-xl">Leafbase</span>
         </a>
       </div>
-      <div class="flex flex-row items-center gap-3 sm:gap-5">
-        <div class="flex-row items-center gap-3 rounded border border-zinc-400 bg-white px-10 py-1.5 pl-4 pr-5 text-black dark:border-zinc-700 dark:bg-zinc-700/60 hidden md:flex">
+      <div class="flex flex-row items-center gap-3 sm:gap-5 relative">
+        <div
+          class="relative flex-row items-center gap-3 rounded border border-zinc-400 bg-white px-10 py-1.5 pl-4 pr-5 text-black dark:border-zinc-700 dark:bg-zinc-700/60 hidden md:flex"
+          _="on click 
+          remove .scale-y-100 from #nav-dropdown 
+          add .scale-y-0 to #nav-dropdown"
+        >
+          <div
+            class="w-full bg-white dark:bg-zinc-700 shadow-lg absolute top-12 left-0 z-50 rounded px-2 py-2 dark:text-white hidden"
+            id="search-results"
+          />
+
           <input
             id="search-input"
-            type="text"
+            name="search"
             placeholder="Search..."
             _="on keyup if my value's length > 0 then remove .hidden from #search-close-icon then add .hidden to #search-icon else add .hidden to #search-close-icon then remove .hidden from #search-icon"
             class="w-full bg-transparent focus:outline-none dark:text-white"
+            hx-post="/api/search"
+            hx-trigger="input changed delay:500ms, search"
+            hx-target="#search-results"
+            hx-swap="outerHTML"
           ></input>
-
           <svg
             id="search-icon"
             class="text-black dark:text-zinc-400"
@@ -49,7 +62,7 @@ async function Navigation({ profile }: Props) {
             stroke-width="0"
             viewBox="0 0 24 24"
             id="search-close-icon"
-            _="on click set #search-input's value to '' then add .hidden to #search-close-icon then remove .hidden from #search-icon"
+            _="on click set #search-input's value to '' then add .hidden to #search-close-icon then remove .hidden from #search-icon then add .hidden to #search-results"
             class="text-black dark:text-zinc-400 hidden cursor-pointer"
             height="22px"
             width="22px"
@@ -59,6 +72,7 @@ async function Navigation({ profile }: Props) {
             <path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
           </svg>
         </div>
+
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="10"
@@ -177,7 +191,7 @@ async function Navigation({ profile }: Props) {
           viewBox="0 0 20 20"
           xmlns="http://www.w3.org/2000/svg"
           id="hamburger-button"
-          _="on click toggle .scale-y-0 on #nav-dropdown then toggle .scale-y-100 on #nav-dropdown"
+          _="on click toggle .scale-y-0 on #nav-dropdown then toggle .scale-y-100 on #nav-dropdown then add .hidden to #search-results"
         >
           <path
             id="hamburger-top"
@@ -195,53 +209,6 @@ async function Navigation({ profile }: Props) {
             class="transition-transform"
           ></path>
         </svg>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `document.addEventListener("DOMContentLoaded", function () {
-              const themeButton = document.querySelector("#theme-button");
-              const htmlElement = document.querySelector("html");
-
-              const hamburgerTop = document.querySelector("#hamburger-top");
-              const hamburgerMiddle = document.querySelector("#hamburger-middle");
-              const hamburgerBottom = document.querySelector("#hamburger-bottom");
-              const hamburgerButton = document.querySelector("#hamburger-button");
-            
-              const sunIcon = document.querySelector("#theme-sun");
-              const moonIcon = document.querySelector("#theme-moon");
-            
-              const savedTheme = localStorage.getItem("theme");
-            
-              if (savedTheme) {
-                htmlElement.className = savedTheme;
-              }
-            
-              if (savedTheme === "light") {
-                sunIcon.classList.remove("hidden");
-                moonIcon.classList.add("hidden");
-              } else {
-                sunIcon.classList.add("hidden");
-                moonIcon.classList.remove("hidden");
-              }
-
-              hamburgerButton.addEventListener("click", function () {
-                hamburgerTop.classList.toggle("rotate-45");
-                hamburgerTop.classList.toggle("translate-x-[6.5px]");
-                hamburgerTop.classList.toggle("-translate-y-[0.5px]");
-                hamburgerMiddle.classList.toggle("hidden");
-                hamburgerBottom.classList.toggle("-rotate-45");
-                hamburgerBottom.classList.toggle("-translate-x-[7.5px]");
-                hamburgerBottom.classList.toggle("translate-y-[6.5px]");
-              });
-            
-              themeButton.addEventListener("click", function () {
-                const currentTheme = htmlElement.className;
-                const newTheme = currentTheme === "dark" ? "light" : "dark";
-                localStorage.setItem("theme", newTheme);
-                htmlElement.className = newTheme;
-              });
-            });`,
-          }}
-        />
       </div>
     </nav>
   );

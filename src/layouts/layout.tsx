@@ -7,17 +7,20 @@ import { Context, Env } from "hono";
 type Props = {
   children: JSX.Element | JSX.Element[];
   title: string;
-  c: Context<
-    Env & {
-      Variables: {
+  c:
+    | Context<
+        Env & {
+          Variables: {
+            // eslint-disable-next-line
+            supabase: SupabaseClient<any, "public", any>;
+          };
+        },
+        string,
         // eslint-disable-next-line
-        supabase: SupabaseClient<any, "public", any>;
-      };
-    },
-    string,
+        {}
+      >
     // eslint-disable-next-line
-    {}
-  >;
+    | Context<Env, any, {}>;
 };
 
 async function RootLayout({ children, title, c }: Props) {
@@ -39,6 +42,7 @@ async function RootLayout({ children, title, c }: Props) {
         <Navigation profile={profile} />
         <NavDropdown pathname={pathname} />
         {children}
+        <script src="/static/navigation.js" />
       </body>
     </html>
   );

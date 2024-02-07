@@ -4,6 +4,7 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { Context, Env } from "hono";
 import { Session, SupabaseClient } from "@supabase/supabase-js";
+import { Database } from "./database";
 
 export async function getPaginatedStrains(
   filter: "re" | "az" | "za" | "sr",
@@ -37,23 +38,37 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export async function getProfile(
-  c: Context<
-    Env & {
-      Variables: {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        supabase: SupabaseClient<any, "public", any>;
-      };
-    },
-    string,
+  c:
+    | Context<
+        Env & {
+          Variables: {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            supabase: SupabaseClient<Database, "public", any>;
+          };
+        },
+        string,
+        // eslint-disable-next-line
+        {}
+      >
     // eslint-disable-next-line
-    {}
-  >
+    | Context<Env, any, {}>
 ) {
+  if (!c || !c.var.supabase) {
+    return { profile: null, session: null };
+  }
+
+  // eslint-disable-next-line
+  const supabase = c.var.supabase as SupabaseClient<Database, "public", any>;
+
   const {
     data: { session },
-  } = await c.var.supabase.auth.getSession();
+  } = await supabase.auth.getSession();
 
-  const { data } = await c.var.supabase
+  if (!session) {
+    return { profile: null, session: null };
+  }
+
+  const { data } = await supabase
     .from("profiles")
     .select("*")
     .eq("id", session?.user?.id)
