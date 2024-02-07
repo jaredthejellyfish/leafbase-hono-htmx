@@ -210,6 +210,7 @@ async function Navigation({ profile }: Props) {
           ></path>
         </svg>
       </div>
+      <script src="/static/navigation.js" defer />
     </nav>
   );
 }
