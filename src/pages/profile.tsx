@@ -40,10 +40,10 @@ function Friend({
 }) {
   const user = useTo ? to : from;
 
-  console.log(status);
   return (
     <a
       href={`/profile/${user.username}`}
+      id={`friendship-${user.id}`}
       class="flex flex-row items-center justify-between rounded-xl border border-zinc-300 bg-zinc-50 px-4 py-1.5 dark:border-zinc-700 dark:bg-zinc-800"
     >
       <div class="flex h-12 flex-row items-center justify-start gap-x-3  sm:gap-x-4 ">
@@ -64,17 +64,38 @@ function Friend({
         </div>
       </div>
       {status === 'pending' && (
-        <div class="cursor-not-allowed rounded border border-zinc-400 px-2 py-1 text-sm text-zinc-400">
+        <div class="cursor-not-allowed rounded border border-zinc-400 px-2 py-1 text-xs text-zinc-400">
           Pending
         </div>
       )}
-      {/* 
+      {/* ?from=${from.id}&to=${to.id} */}
       {status === 'toAccept' && (
-<div class="flex flex-row sm:gap-x-2">
-<DenyRequestButton from={from.id} to={to.id} />
-<AcceptRequestButton from={from.id} to={to.id} />
-</div>
-)} */}
+        <div
+          class="flex flex-row gap-x-2 sm:gap-x-1"
+          id={`friendship-status-${user.id}`}
+        >
+          <button
+            class="mr-1 block rounded-md border border-zinc-500 bg-transparent px-2 text-xs text-zinc-700 transition-colors hover:bg-zinc-700 hover:text-white dark:text-zinc-300 hover:dark:bg-zinc-300/80 hover:dark:text-zinc-800 sm:hidden xl:block"
+            hx-post={`/api/friends/deny`}
+            hx-vals={`{"from": "${from.id}", "to": "${to.id}"}`}
+            hx-target={`#friendship-${user.id}`}
+            hx-swap="delete"
+            _="on click halt the event"
+          >
+            Deny
+          </button>
+          <button
+            class="rounded-md bg-green-700 px-2 py-1 text-xs text-white transition-colors hover:bg-green-800"
+            hx-post={`/api/friends/accept`}
+            hx-vals={`{"from": "${from.id}", "to": "${to.id}"}`}
+            hx-target={`#friendship-status-${user.id}`}
+            hx-swap="outerHTML"
+            _="on click halt the event"
+          >
+            Accept
+          </button>
+        </div>
+      )}
 
       {status === 'accepted' && (
         <svg
@@ -193,39 +214,26 @@ function ProfilePage({ user, session, friends }: Props) {
             </form>
           </div>
           {friends && (
-            <div class="relative z-0 mt-3 flex w-full flex-col rounded-xl px-5 shadow-md dark:bg-zinc-900">
-              <h3 class="mx-2 text-xl font-bold">Friends</h3>
-              {friends.map((friend, index) => {
-                if (index > 2) return null;
+            <div class="relative z-0 mt-3 flex w-full flex-col rounded-xl px-5 py-2.5 pb-3 shadow-md dark:bg-zinc-900">
+              <h3 class="mx-1 mb-2 text-xl font-bold">Friends</h3>
+              <div class={'flex flex-col gap-y-2 align-top'}>
+                {friends.slice(0, 3).map((friend) => {
+                  let status;
+                  if (friend.pending) {
+                    status =
+                      friend.from.id === session.user.id
+                        ? 'pending'
+                        : 'toAccept';
+                  } else {
+                    status = 'accepted';
+                  }
+                  const useTo = friend.to.id !== session.user.id;
 
-                if (friend.pending && friend.from.id === session.user.id)
                   return (
-                    <Friend
-                      friend={friend}
-                      status={'pending'}
-                      useTo={friend.to.id !== session.user.id}
-                    />
+                    <Friend friend={friend} status={status} useTo={useTo} />
                   );
-                if (friend.from.id !== session.user.id && friend.pending)
-                  return (
-                    <Friend
-                      friend={friend}
-                      status={'toAccept'}
-                      useTo={friend.to.id !== session.user.id}
-                    />
-                  );
-                if (
-                  (friend.from.id === session.user.id && !friend.pending) ||
-                  (friend.to.id === session.user.id && !friend.pending)
-                )
-                  return (
-                    <Friend
-                      friend={friend}
-                      status={'accepted'}
-                      useTo={friend.to.id !== session.user.id}
-                    />
-                  );
-              })}
+                })}
+              </div>
             </div>
           )}
         </div>

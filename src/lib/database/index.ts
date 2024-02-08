@@ -210,14 +210,14 @@ export type Database = {
             foreignKeyName: "long_pairings_strain1_id_fkey"
             columns: ["strain1_id"]
             isOneToOne: false
-            referencedRelation: "strains_o"
+            referencedRelation: "strains"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "long_pairings_strain2_id_fkey"
             columns: ["strain2_id"]
             isOneToOne: false
-            referencedRelation: "strains_o"
+            referencedRelation: "strains"
             referencedColumns: ["id"]
           }
         ]
@@ -362,14 +362,14 @@ export type Database = {
             foreignKeyName: "short_pairings_strain1_id_fkey"
             columns: ["strain1_id"]
             isOneToOne: false
-            referencedRelation: "strains_o"
+            referencedRelation: "strains"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "short_pairings_strain2_id_fkey"
             columns: ["strain2_id"]
             isOneToOne: false
-            referencedRelation: "strains_o"
+            referencedRelation: "strains"
             referencedColumns: ["id"]
           }
         ]
@@ -440,7 +440,7 @@ export type Database = {
             foreignKeyName: "strain_comments_strain_id_fkey"
             columns: ["strain_id"]
             isOneToOne: false
-            referencedRelation: "strains_o"
+            referencedRelation: "strains"
             referencedColumns: ["id"]
           },
           {
@@ -476,7 +476,7 @@ export type Database = {
             foreignKeyName: "strain_likes_strain_id_fkey"
             columns: ["strain_id"]
             isOneToOne: false
-            referencedRelation: "strains_o"
+            referencedRelation: "strains"
             referencedColumns: ["id"]
           },
           {
@@ -554,7 +554,7 @@ export type Database = {
         }
         Relationships: []
       }
-      strains_o: {
+      strains_pg: {
         Row: {
           averageRating: number | null
           cannabinoids: Json | null
@@ -644,7 +644,7 @@ export type Database = {
             foreignKeyName: "strains_vectors_strain_id_fkey"
             columns: ["strain_id"]
             isOneToOne: false
-            referencedRelation: "strains_o"
+            referencedRelation: "strains"
             referencedColumns: ["id"]
           }
         ]
