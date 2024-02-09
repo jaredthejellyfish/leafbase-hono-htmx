@@ -1,3 +1,4 @@
+import Image from '@c/Image';
 import StarRating from '@c/star-rating';
 
 import { Strain } from '@/types';
@@ -43,6 +44,7 @@ const effects: Colors = {
 };
 
 function StrainCard({ strain, loadMore, page, filter }: Props) {
+  console.log(page);
   return (
     <div
       class="max-h-[280px] w-full rounded-xl p-3 shadow-md dark:bg-zinc-900 dark:shadow-none sm:max-h-full md:max-w-[280px]"
@@ -61,11 +63,13 @@ function StrainCard({ strain, loadMore, page, filter }: Props) {
           class="mr-3 flex max-h-[280px] w-1/2 max-w-[280px] items-center justify-center rounded-lg border border-white bg-zinc-300/10 dark:border-transparent dark:border-zinc-800 dark:bg-zinc-950/30 sm:mb-1 sm:mr-0 sm:w-full"
           id="image"
         >
-          <img
-            class="aspect-square h-full max-h-[250px] w-full max-w-[250px] rounded-lg object-contain p-4   dark:opacity-90"
+          <Image
+            class="aspect-square h-full max-h-[250px] w-full max-w-[250px] rounded-lg object-contain p-4 dark:opacity-90"
+            lazy={page !== 2}
             width={250}
             height={250}
-            src={strain.nugImage ?? undefined}
+            alt={`${strain.name} nug shot`}
+            src={strain.nugImage || '/static/placeholder.jpg'}
           />
         </div>
 

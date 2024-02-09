@@ -1,4 +1,4 @@
-import Bun from 'bun';
+import Bun, { argv } from 'bun';
 import { $ } from 'bun';
 import figlet from 'figlet';
 import ora from 'ora';
@@ -44,6 +44,8 @@ const buildTime = Date.now() - buildTimeStart;
 
 if (out.success) buildSpinner.succeed(`Compiled scripts in ${buildTime}ms`);
 else buildSpinner.fail(`Failed to compile scripts with error: ${out.logs}`);
+
+if (argv.includes('--scripts') || argv.includes('-s')) process.exit(0);
 
 const supabaseSpinner = ora('Generating supabase types').start();
 const supabaseTimeStart = Date.now();

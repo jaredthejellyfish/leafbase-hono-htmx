@@ -5,7 +5,7 @@ import z from 'zod';
 
 import RootLayout from '@l/layout';
 
-import { getFriends, getProfile } from '@lb/utils';
+import { getFriends, getLikedStrains, getProfile } from '@lb/utils';
 
 import AllStrains from '@p/all-strains';
 import LoginPage from '@p/login';
@@ -97,8 +97,9 @@ app.get('/strains/:strain', supabaseMiddleware, async (c) => {
 app.get('/profile', supabaseMiddleware, async (c) => {
   const { profile, session } = await getProfile(c);
   const { friends, error } = await getFriends(c, session);
+  const { likes, error: likedStrainsError } = await getLikedStrains(c, session);
 
-  if (!profile || !session || error) {
+  if (!profile || !session || error || likedStrainsError) {
     return c.redirect('/login');
   }
 
@@ -108,7 +109,12 @@ app.get('/profile', supabaseMiddleware, async (c) => {
       description={`Profile page for ${profile.username}.`}
       c={c}
     >
-      <ProfilePage user={profile} session={session} friends={friends} />
+      <ProfilePage
+        user={profile}
+        session={session}
+        friends={friends}
+        likes={likes}
+      />
     </RootLayout>,
   );
 });

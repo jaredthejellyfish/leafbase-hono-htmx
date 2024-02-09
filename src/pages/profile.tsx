@@ -1,17 +1,20 @@
 import { Session } from '@supabase/supabase-js';
 import { format } from 'date-fns';
 
-import Modal from '@c/modal';
+import Image from '@c/Image';
+import Friend from '@c/friend';
 import NavBreadcrumbs from '@c/nav-breadcrumbs';
 
 import { cn } from '@lb/utils';
 
 import { FriendExtended, Profile } from '@/types';
+import { StrainLike } from '@/types';
 
 type Props = {
   user: Profile;
   session: Session;
   friends: FriendExtended[] | null;
+  likes: StrainLike[] | null;
 };
 
 export const languages = [
@@ -26,101 +29,31 @@ export const languages = [
   { label: 'Chinese', value: 'zh' },
 ] as const;
 
-function Friend({
-  friend: { to, from },
-  status,
-  useTo,
+function LikedStrain({
+  name,
+  image,
+  slug,
 }: {
-  friend: {
-    to: { id: string; username: string; name: string; image: string };
-    from: { id: string; username: string; name: string; image: string };
-  };
-  status: string;
-  useTo?: boolean;
+  name: string;
+  image: string;
+  slug: string;
 }) {
-  const user = useTo ? to : from;
-
   return (
     <a
-      href={`/profile/${user.username}`}
-      id={`friendship-${user.id}`}
-      class="flex flex-row items-center justify-between rounded-xl border border-zinc-300 bg-zinc-50 px-4 py-1.5 dark:border-zinc-700 dark:bg-zinc-800"
+      class="flex w-[100] flex-col items-center rounded-lg border bg-zinc-100/20 shadow dark:border-transparent dark:bg-zinc-800/70 xs:w-[110px] xs:scale-95 sm:w-[125px]"
+      href={`/strains/${slug}`}
     >
-      <div class="flex h-12 flex-row items-center justify-start gap-x-3  sm:gap-x-4 ">
-        <img
-          src={user.image!}
-          alt={user.name!}
-          width={50}
-          height={50}
-          class="aspect-square size-11 rounded-full sm:size-12"
-        />
-        <div class="flex flex-col gap-0">
-          <span class="-mb-1.5 text-sm font-semibold sm:text-base">
-            {user.name}
-          </span>
-          <span class="mt-1 text-xs text-green-700 sm:mt-0.5 sm:text-sm">
-            @{user.username}
-          </span>
-        </div>
+      <div class="mx-2 mb-1 mt-2 h-[98px] w-[98px] rounded border bg-zinc-300/50 p-0.5 shadow dark:border-zinc-700/80 dark:bg-zinc-700/30">
+        <Image alt={slug} width={96} height={96} src={image} />
       </div>
-      {status === 'pending' && (
-        <div class="cursor-not-allowed rounded border border-zinc-400 px-2 py-1 text-xs text-zinc-400">
-          Pending
-        </div>
-      )}
-      {/* ?from=${from.id}&to=${to.id} */}
-      {status === 'toAccept' && (
-        <div
-          class="flex flex-row gap-x-2 sm:gap-x-1"
-          id={`friendship-status-${user.id}`}
-        >
-          <button
-            class="mr-1 block rounded-md border border-zinc-500 bg-transparent px-2 text-xs text-zinc-700 transition-colors hover:bg-zinc-700 hover:text-white dark:text-zinc-300 hover:dark:bg-zinc-300/80 hover:dark:text-zinc-800 sm:hidden xl:block"
-            hx-post={`/api/friends/deny`}
-            hx-vals={`{"from": "${from.id}", "to": "${to.id}"}`}
-            hx-target={`#friendship-${user.id}`}
-            hx-swap="delete"
-            _="on click halt the event"
-          >
-            Deny
-          </button>
-          <button
-            class="rounded-md bg-green-700 px-2 py-1 text-xs text-white transition-colors hover:bg-green-800"
-            hx-post={`/api/friends/accept`}
-            hx-vals={`{"from": "${from.id}", "to": "${to.id}"}`}
-            hx-target={`#friendship-status-${user.id}`}
-            hx-swap="outerHTML"
-            _="on click halt the event"
-          >
-            Accept
-          </button>
-        </div>
-      )}
-
-      {status === 'accepted' && (
-        <svg
-          class="justify-self-end"
-          stroke="currentColor"
-          fill="none"
-          stroke-width="0"
-          viewBox="0 0 15 15"
-          height="35px"
-          width="35px"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
-            d="M6.18194 4.18185C6.35767 4.00611 6.6426 4.00611 6.81833 4.18185L9.81833 7.18185C9.90272 7.26624 9.95013 7.3807 9.95013 7.50005C9.95013 7.6194 9.90272 7.73386 9.81833 7.81825L6.81833 10.8182C6.6426 10.994 6.35767 10.994 6.18194 10.8182C6.0062 10.6425 6.0062 10.3576 6.18194 10.1819L8.86374 7.50005L6.18194 4.81825C6.0062 4.64251 6.0062 4.35759 6.18194 4.18185Z"
-            fill="currentColor"
-          ></path>
-        </svg>
-      )}
+      <span class="mb-1.5 max-w-[94px] truncate py-1 text-xs sm:text-base">
+        {name}
+      </span>
     </a>
   );
 }
 
-function ProfilePage({ user, session, friends }: Props) {
+function ProfilePage({ user, session, friends, likes = [] }: Props) {
   return (
     <div class="px-5 py-3 sm:px-10 xl:px-14">
       <NavBreadcrumbs urls={[{ name: 'Profile', url: '/profile' }]} />
@@ -131,8 +64,6 @@ function ProfilePage({ user, session, friends }: Props) {
               <img
                 src={user.image}
                 alt="profile"
-                priority
-                unoptimized
                 class="rounded-md"
                 width={80}
                 height={80}
@@ -271,14 +202,48 @@ function ProfilePage({ user, session, friends }: Props) {
                   </p>
                 </span>
               )}
-              <Modal
-                trigger={<span>open</span>}
-                name="settings"
-                title="Trigger"
-              >
-                <span>content</span>
-              </Modal>
             </div>
+          </div>
+          <div
+            id="liked-strains-container"
+            class="max-h-98 overflow-y-hidden px-2 pt-3 transition-max-w xs:max-h-100 sm:max-h-102"
+          >
+            <div class="flex flex-row gap-x-1.5">
+              <h2 class="mb-1.5 text-2xl font-bold">Liked Strains</h2>
+              <h3 class="mt-[1.5px] text-lg font-bold text-zinc-400/90">
+                ({likes?.length ?? 0})
+              </h3>
+            </div>
+            <div class="flex w-full flex-row flex-wrap gap-x-1.5 gap-y-1.5 sm:justify-start sm:gap-x-1.5 sm:gap-y-2">
+              {likes?.map((strain) => (
+                <LikedStrain
+                  name={strain.strain_id.name}
+                  image={strain.strain_id.nugImage}
+                  slug={strain.strain_id.slug}
+                />
+              ))}
+            </div>
+          </div>
+          <div class="mt-1 flex items-center justify-center px-2">
+            <svg
+              id="arrow-down-liked"
+              stroke="currentColor"
+              fill="none"
+              stroke-width="0"
+              viewBox="0 0 15 15"
+              height="35px"
+              width="35px"
+              _="on click toggle .rotate-180 on #arrow-down-liked then toggle .max-h-98 on #liked-strains-container then toggle .xs:max-h-100 on #liked-strains-container then toggle .sm:max-h-102 on #liked-strains-container"
+              class="transition-transform duration-200"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M4.18179 6.18181C4.35753 6.00608 4.64245 6.00608 4.81819 6.18181L7.49999 8.86362L10.1818 6.18181C10.3575 6.00608 10.6424 6.00608 10.8182 6.18181C10.9939 6.35755 10.9939 6.64247 10.8182 6.81821L7.81819 9.81821C7.73379 9.9026 7.61934 9.95001 7.49999 9.95001C7.38064 9.95001 7.26618 9.9026 7.18179 9.81821L4.18179 6.81821C4.00605 6.64247 4.00605 6.35755 4.18179 6.18181Z"
+                fill="currentColor"
+              ></path>
+            </svg>
           </div>
         </div>
       </div>

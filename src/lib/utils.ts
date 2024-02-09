@@ -6,7 +6,11 @@ import { twMerge } from 'tailwind-merge';
 import { Database } from '@lb/database';
 import { supabase } from '@lb/supabase';
 
-import { FriendExtended, Profile, Strain } from '@/types';
+import { FriendExtended, Profile, Strain, StrainLike } from '@/types';
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
 export async function getPaginatedStrains(
   filter: 're' | 'az' | 'za' | 'sr',
@@ -33,10 +37,6 @@ export async function getPaginatedStrains(
   const { data: strains, error } = await query.returns<Strain[]>();
 
   return { strains, error };
-}
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
 }
 
 export async function getProfile(
@@ -82,6 +82,7 @@ export async function getProfile(
 
   return { profile: null, session: null };
 }
+
 export async function getFriends(
   c:
     | Context<
@@ -144,4 +145,49 @@ export async function getFriends(
   });
 
   return { friends, error: null };
+}
+
+export async function getLikedStrains(
+  c:
+    | Context<
+        Env & {
+          Variables: {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            supabase: SupabaseClient<Database, 'public', any>;
+          };
+        },
+        string,
+        // eslint-disable-next-line
+        {}
+      >
+    // eslint-disable-next-line
+    | Context<Env, any, {}>,
+  session: Session | null,
+) {
+  if (!c || !c.var.supabase || !session) {
+    return { likes: null, error: null };
+  }
+
+  // eslint-disable-next-line
+  const supabase = c.var.supabase as SupabaseClient<Database, 'public', any>;
+
+  const { data: strainLikes, error: strainLikesError } = await supabase
+    .from('strain_likes')
+    .select(
+      `
+    id, created_at,
+    strain_id (
+      name,
+      nugImage,
+      slug,
+      id
+    )
+  `,
+    )
+    .eq('user_id', session?.user.id)
+    .returns<StrainLike[]>();
+
+  if (strainLikesError) return { likes: null, error: strainLikesError };
+
+  return { likes: strainLikes, error: null };
 }
