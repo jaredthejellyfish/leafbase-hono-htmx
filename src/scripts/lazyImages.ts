@@ -1,5 +1,4 @@
 function lazyLoadImages() {
-  console.log('lazyLoadImages');
   const lazyImages =
     document.querySelectorAll<HTMLImageElement>('[data-lazy="true"]');
 
@@ -8,10 +7,10 @@ function lazyLoadImages() {
       if (entry.isIntersecting) {
         const lazyImage = entry.target as HTMLImageElement;
         if (!lazyImage.dataset.lazysrc) return;
+        lazyImageObserver.unobserve(lazyImage);
         lazyImage.src = lazyImage.dataset.lazysrc;
         lazyImage.dataset.lazy = 'false';
-        lazyImage.attributes.removeNamedItem('data-lazysrc');
-        lazyImageObserver.unobserve(lazyImage);
+        lazyImage.removeAttribute('data-lazysrc');
       }
     });
   });

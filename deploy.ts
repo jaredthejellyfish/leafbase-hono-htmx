@@ -39,6 +39,7 @@ const out = await Bun.build({
   entrypoints: [...filePaths],
   outdir: './assets/static/',
   minify: true,
+  target: 'browser',
 });
 const buildTime = Date.now() - buildTimeStart;
 

@@ -1,4 +1,8 @@
-document.addEventListener('DOMContentLoaded', function () {
+if (!window?.isPageLoaded) {
+  document.body.addEventListener('htmx:load', () => initializePage());
+}
+
+const initializePage = function () {
   const themeButton = document.querySelector('#theme-button');
   const htmlElement = document.querySelector('html');
 
@@ -14,6 +18,9 @@ document.addEventListener('DOMContentLoaded', function () {
   const moonIcon = document.querySelector('#theme-moon');
 
   const savedTheme = localStorage.getItem('theme');
+
+  const navDropdownOverlay = document.getElementById('nav-dropdown-overlay');
+  const navDropdown = document.getElementById('nav-dropdown');
 
   if (savedTheme && htmlElement) {
     htmlElement.className = savedTheme;
@@ -56,20 +63,68 @@ document.addEventListener('DOMContentLoaded', function () {
     return hamburgerTop.classList.contains('rotate-45');
   };
 
-  hamburgerButton?.addEventListener('click', function () {
-    if (isHamburgerOpen()) closeHamburger();
-    else openHamburger();
-  });
+  const closeModal = function () {
+    if (!navDropdownOverlay || !navDropdown) return;
 
-  searchBar?.addEventListener('click', function () {
-    if (isHamburgerOpen()) closeHamburger();
-  });
+    navDropdownOverlay.classList.remove('opacity-70');
+    navDropdownOverlay.classList.add('opacity-0');
 
-  themeButton?.addEventListener('click', function () {
+    setTimeout(() => {
+      navDropdownOverlay.classList.add('hidden');
+    }, 300);
+  };
+
+  const openModal = function () {
+    if (!navDropdownOverlay || !navDropdown) return;
+
+    navDropdownOverlay.classList.remove('hidden');
+    navDropdownOverlay.classList.add('opacity-70');
+    navDropdownOverlay.classList.remove('opacity-0');
+  };
+
+  const isModalOpen = function () {
+    if (!navDropdownOverlay) return false;
+    return navDropdownOverlay.classList.contains('opacity-70');
+  };
+
+  const handleModal = function () {
+    if (isModalOpen()) {
+      closeModal();
+    } else {
+      openModal();
+    }
+  };
+
+  const hambuergerClick = function () {
+    if (isHamburgerOpen()) {
+      closeHamburger();
+      handleModal();
+    } else {
+      openHamburger();
+      handleModal();
+    }
+  };
+
+  hamburgerButton?.addEventListener('click', hambuergerClick);
+
+  const searchClick = function () {
+    if (isHamburgerOpen()) {
+      closeHamburger();
+      closeModal();
+    }
+  };
+
+  searchBar?.addEventListener('click', searchClick);
+
+  const themeClick = function () {
     if (!htmlElement) return;
     const currentTheme = htmlElement.className;
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     localStorage.setItem('theme', newTheme);
     htmlElement.className = newTheme;
-  });
-});
+  };
+
+  themeButton?.addEventListener('click', themeClick);
+
+  window.isPageLoaded = true;
+};

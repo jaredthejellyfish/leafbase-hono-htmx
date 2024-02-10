@@ -1,1 +1,114 @@
-document.addEventListener("DOMContentLoaded",function(){const D=document.querySelector("#theme-button"),S=document.querySelector("html"),y=document.querySelector("#hamburger-top"),j=document.querySelector("#hamburger-middle"),f=document.querySelector("#hamburger-bottom"),F=document.querySelector("#hamburger-button"),G=document.querySelector("#search-input"),k=document.querySelector("#theme-sun"),q=document.querySelector("#theme-moon"),x=localStorage.getItem("theme");if(x&&S)S.className=x;if(x==="light"){if(!k||!q)return;k.classList.remove("hidden"),q.classList.add("hidden")}else{if(!k||!q)return;k.classList.add("hidden"),q.classList.remove("hidden")}const z=function(){if(!y||!j||!f)return;y.classList.remove("rotate-45"),y.classList.remove("translate-x-[6.5px]"),y.classList.remove("-translate-y-[0.5px]"),j.classList.remove("hidden"),f.classList.remove("-rotate-45"),f.classList.remove("-translate-x-[7.5px]"),f.classList.remove("translate-y-[6.5px]")},J=function(){if(!y||!j||!f)return;y.classList.add("rotate-45"),y.classList.add("translate-x-[6.5px]"),y.classList.add("-translate-y-[0.5px]"),j.classList.add("hidden"),f.classList.add("-rotate-45"),f.classList.add("-translate-x-[7.5px]"),f.classList.add("translate-y-[6.5px]")},A=function(){if(!y)return!1;return y.classList.contains("rotate-45")};F?.addEventListener("click",function(){if(A())z();else J()}),G?.addEventListener("click",function(){if(A())z()}),D?.addEventListener("click",function(){if(!S)return;const C=S.className==="dark"?"light":"dark";localStorage.setItem("theme",C),S.className=C})});
+// src/scripts/navigation.ts
+if (!window?.isPageLoaded) {
+  document.body.addEventListener("htmx:load", () => initializePage());
+}
+var initializePage = function() {
+  const themeButton = document.querySelector("#theme-button");
+  const htmlElement = document.querySelector("html");
+  const hamburgerTop = document.querySelector("#hamburger-top");
+  const hamburgerMiddle = document.querySelector("#hamburger-middle");
+  const hamburgerBottom = document.querySelector("#hamburger-bottom");
+  const hamburgerButton = document.querySelector("#hamburger-button");
+  const searchBar = document.querySelector("#search-input");
+  const sunIcon = document.querySelector("#theme-sun");
+  const moonIcon = document.querySelector("#theme-moon");
+  const savedTheme = localStorage.getItem("theme");
+  const navDropdownOverlay = document.getElementById("nav-dropdown-overlay");
+  const navDropdown = document.getElementById("nav-dropdown");
+  if (savedTheme && htmlElement) {
+    htmlElement.className = savedTheme;
+  }
+  if (savedTheme === "light") {
+    if (!sunIcon || !moonIcon)
+      return;
+    sunIcon.classList.remove("hidden");
+    moonIcon.classList.add("hidden");
+  } else {
+    if (!sunIcon || !moonIcon)
+      return;
+    sunIcon.classList.add("hidden");
+    moonIcon.classList.remove("hidden");
+  }
+  const closeHamburger = function() {
+    if (!hamburgerTop || !hamburgerMiddle || !hamburgerBottom)
+      return;
+    hamburgerTop.classList.remove("rotate-45");
+    hamburgerTop.classList.remove("translate-x-[6.5px]");
+    hamburgerTop.classList.remove("-translate-y-[0.5px]");
+    hamburgerMiddle.classList.remove("hidden");
+    hamburgerBottom.classList.remove("-rotate-45");
+    hamburgerBottom.classList.remove("-translate-x-[7.5px]");
+    hamburgerBottom.classList.remove("translate-y-[6.5px]");
+  };
+  const openHamburger = function() {
+    if (!hamburgerTop || !hamburgerMiddle || !hamburgerBottom)
+      return;
+    hamburgerTop.classList.add("rotate-45");
+    hamburgerTop.classList.add("translate-x-[6.5px]");
+    hamburgerTop.classList.add("-translate-y-[0.5px]");
+    hamburgerMiddle.classList.add("hidden");
+    hamburgerBottom.classList.add("-rotate-45");
+    hamburgerBottom.classList.add("-translate-x-[7.5px]");
+    hamburgerBottom.classList.add("translate-y-[6.5px]");
+  };
+  const isHamburgerOpen = function() {
+    if (!hamburgerTop)
+      return false;
+    return hamburgerTop.classList.contains("rotate-45");
+  };
+  const closeModal = function() {
+    if (!navDropdownOverlay || !navDropdown)
+      return;
+    navDropdownOverlay.classList.remove("opacity-70");
+    navDropdownOverlay.classList.add("opacity-0");
+    setTimeout(() => {
+      navDropdownOverlay.classList.add("hidden");
+    }, 300);
+  };
+  const openModal = function() {
+    if (!navDropdownOverlay || !navDropdown)
+      return;
+    navDropdownOverlay.classList.remove("hidden");
+    navDropdownOverlay.classList.add("opacity-70");
+    navDropdownOverlay.classList.remove("opacity-0");
+  };
+  const isModalOpen = function() {
+    if (!navDropdownOverlay)
+      return false;
+    return navDropdownOverlay.classList.contains("opacity-70");
+  };
+  const handleModal = function() {
+    if (isModalOpen()) {
+      closeModal();
+    } else {
+      openModal();
+    }
+  };
+  const hambuergerClick = function() {
+    if (isHamburgerOpen()) {
+      closeHamburger();
+      handleModal();
+    } else {
+      openHamburger();
+      handleModal();
+    }
+  };
+  hamburgerButton?.addEventListener("click", hambuergerClick);
+  const searchClick = function() {
+    if (isHamburgerOpen()) {
+      closeHamburger();
+      closeModal();
+    }
+  };
+  searchBar?.addEventListener("click", searchClick);
+  const themeClick = function() {
+    if (!htmlElement)
+      return;
+    const currentTheme = htmlElement.className;
+    const newTheme = currentTheme === "dark" ? "light" : "dark";
+    localStorage.setItem("theme", newTheme);
+    htmlElement.className = newTheme;
+  };
+  themeButton?.addEventListener("click", themeClick);
+  window.isPageLoaded = true;
+};

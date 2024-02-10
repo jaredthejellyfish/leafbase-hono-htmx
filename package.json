@@ -2,7 +2,7 @@
   "scripts": {
     "dev": "bunx wrangler dev src/index.tsx",
     "deploy": "bun run deploy.ts",
-    "scripts": "bun run deploy.ts -s",
+    "dev:scripts": "bun run scripts.ts",
     "css:dev": "bunx tailwindcss -o ./assets/static/index.css --minify --watch",
     "css:prod": "bunx tailwindcss -o ./assets/static/index.css --minify"
   },
@@ -12,6 +12,8 @@
     "clsx": "^2.1.0",
     "date-fns": "^3.3.1",
     "hono": "^3.12.8",
+    "intersection-observer": "^0.12.2",
+    "node-watch": "^0.7.4",
     "supabase": "^1.136.3",
     "tailwind-merge": "^2.2.1"
   },

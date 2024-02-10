@@ -111,7 +111,7 @@ export default async function AllStrains({ filter }: Props) {
         <div class="flex w-full flex-col items-center justify-center gap-4">
           <div
             id="response-div"
-            class="relative mt-4 grid gap-x-4 gap-y-4 md:grid-cols-3 xl:grid-cols-4"
+            class="relative mt-4 grid gap-x-4 gap-y-4 md:grid-cols-3 xl:grid-cols-4 w-full md:w-auto"
           >
             {strains &&
               strains.map((strain, index) => (
