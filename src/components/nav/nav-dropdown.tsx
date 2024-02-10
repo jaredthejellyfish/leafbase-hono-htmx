@@ -22,7 +22,7 @@ function NavDropdown({ pathname }: Props) {
     <>
       <div
         id="nav-dropdown"
-        class="absolute left-0 top-[56px] z-50 w-screen origin-top scale-y-0 rounded-b bg-white px-4 py-2 shadow-lg transition-transform duration-300 dark:bg-zinc-800/100 sm:top-16 sm:px-5 sm:py-3"
+        class="fixed left-0 right-0 top-[56px] z-50 w-screen origin-top scale-y-0 rounded-b bg-white px-4 py-2 shadow-lg transition-transform duration-300 dark:bg-zinc-800/100 sm:top-16 sm:px-5 sm:py-3"
       >
         <div class="relative mb-2 flex flex-row items-center gap-3 rounded border border-zinc-400 bg-white px-10 py-1.5 pl-4 pr-5 text-black dark:border-zinc-700 dark:bg-zinc-700/60 md:hidden">
           <div
@@ -99,9 +99,8 @@ function NavDropdown({ pathname }: Props) {
       </div>
       <div
         id="nav-dropdown-overlay"
-        class={
-          'fixed bottom-0 left-0 right-0 top-16 z-10 hidden bg-zinc-950 opacity-0 transition-opacity duration-300'
-        }
+        _="on click toggle .scale-y-0 on #nav-dropdown then toggle .scale-y-100 on #nav-dropdown then add .hidden to #search-results"
+        class={'fixed bottom-0 left-0 right-0 top-16 z-10 hidden bg-zinc-950'}
       ></div>
     </>
   );

@@ -39,7 +39,6 @@ async function RootLayout({ children, title, description, c }: Props) {
         <link rel="stylesheet" href="/static/index.css" />
         <script src="https://unpkg.com/htmx.org@1.9.3"></script>
         <script src="https://unpkg.com/hyperscript.org@0.9.9"></script>
-        <script src="https://cdn.jsdelivr.net/npm/intersection-observer-polyfill@0.1.0/dist/IntersectionObserver.min.js"></script>
         <script src="/static/navigation.js" defer />
         <script src="/static/lazyImages.js" defer />
         <title>{title}</title>

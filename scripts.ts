@@ -1,4 +1,4 @@
-import Bun, { argv } from 'bun';
+import Bun from 'bun';
 import { $ } from 'bun';
 import figlet from 'figlet';
 import { watch } from 'fs';

@@ -47,7 +47,7 @@ function StrainCard({ strain, loadMore, page, filter }: Props) {
   return (
     <div
       class="max-h-[280px] w-full rounded-xl p-3 shadow-md dark:bg-zinc-900 dark:shadow-none sm:max-h-full md:max-w-[280px]"
-      href={`/strains/${strain.slug}`} 
+      href={`/strains/${strain.slug}`}
       hx-get={
         loadMore
           ? `/api/strains?page=${page ? page : 0}&filter=${filter}`

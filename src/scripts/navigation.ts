@@ -1,6 +1,7 @@
-if (!window?.isPageLoaded) {
-  document.body.addEventListener('htmx:load', () => initializePage());
-}
+document.addEventListener('DOMContentLoaded', () => {
+  if (!window?.isPageLoaded)
+    document.body.addEventListener('htmx:load', () => initializePage());
+});
 
 const initializePage = function () {
   const themeButton = document.querySelector('#theme-button');
@@ -66,8 +67,14 @@ const initializePage = function () {
   const closeModal = function () {
     if (!navDropdownOverlay || !navDropdown) return;
 
-    navDropdownOverlay.classList.remove('opacity-70');
-    navDropdownOverlay.classList.add('opacity-0');
+    const intervalId = setInterval(() => {
+      navDropdownOverlay.style.opacity = `${parseFloat(navDropdownOverlay.style.opacity) - 0.03}`;
+      if (parseFloat(navDropdownOverlay.style.opacity) <= 0) {
+        navDropdownOverlay.style.opacity = '0';
+        clearInterval(intervalId);
+        navDropdownOverlay.classList.add('hidden');
+      }
+    }, 15);
 
     setTimeout(() => {
       navDropdownOverlay.classList.add('hidden');
@@ -78,13 +85,17 @@ const initializePage = function () {
     if (!navDropdownOverlay || !navDropdown) return;
 
     navDropdownOverlay.classList.remove('hidden');
-    navDropdownOverlay.classList.add('opacity-70');
-    navDropdownOverlay.classList.remove('opacity-0');
+    navDropdownOverlay.style.opacity = '0';
+    for (let i = 0; i < 20; i++) {
+      setTimeout(() => {
+        navDropdownOverlay.style.opacity = `${i * 0.03}`;
+      }, i * 15);
+    }
   };
 
   const isModalOpen = function () {
     if (!navDropdownOverlay) return false;
-    return navDropdownOverlay.classList.contains('opacity-70');
+    return !navDropdownOverlay.classList.contains('hidden');
   };
 
   const handleModal = function () {
@@ -106,6 +117,7 @@ const initializePage = function () {
   };
 
   hamburgerButton?.addEventListener('click', hambuergerClick);
+  navDropdownOverlay?.addEventListener('click', hambuergerClick);
 
   const searchClick = function () {
     if (isHamburgerOpen()) {
